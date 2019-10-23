@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /*
 |--------------------------------------------------------------------------
@@ -14,15 +14,15 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
+const Route = use("Route");
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
+Route.get("/", () => {
+  return { greeting: "Instale Tecnologia DirectAPI" };
+});
 
-Route.post('/users', 'UserController.create')
-Route.get('/api/currentUser', 'UserController.index')
-Route.post('/sessions', 'SessionController.create')
-Route.get('/geo-process/coords', 'GeoProcessController.getCoords')
-Route.get('/geo-process/position', 'GeoProcessController.getPosition')
-Route.get('/flux', 'GeoProcessController.getFlux')
+Route.post("/users", "UserController.create");
+Route.get("/api/currentUser", "UserController.index");
+Route.post("/sessions", "SessionController.create");
+Route.get("/geo-process/coords", "GeoProcessController.getCoords");
+Route.get("/geo-process/position", "GeoProcessController.getPosition");
+Route.get("/flux", "GeoProcessController.getFlux");
