@@ -16,13 +16,79 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
+//Routes Users
+Route.post('/users', 'UserController.store').validator('User/store')
 
-Route.post('/users', 'UserController.create')
-Route.get('/api/currentUser', 'UserController.index')
-Route.post('/sessions', 'SessionController.create')
+// Routes Sessions
+Route.post('/sessions', 'SessionController.store').validator('Session')
+
+// Route Forgot Password
+Route.post('/forgot-passoword', 'ForgotPasswordController.store')
+Route.put('/forgot-passoword', 'ForgotPasswordController.update')
+
+
 Route.get('/geo-process/coords', 'GeoProcessController.getCoords')
 Route.get('/geo-process/position', 'GeoProcessController.getPosition')
 Route.get('/flux', 'GeoProcessController.getFlux')
+
+// Authenticated only
+Route.group (() => {
+// Routes File
+Route.get('/files/:id', 'FileController.show')
+Route.post('/files', 'FileController.store')
+
+//Routes Session
+Route.get('/sessions/currentUser', 'SessionController.currentUser')
+//Routes Session
+
+//Routes Users
+Route.get('/users', 'UserController.index')
+Route.get('/users/:id', 'UserController.show')
+Route.put('/users/:id', 'UserController.update').validator('User/update')
+Route.delete('/users/:id', 'UserController.destroy')
+//Routes Users
+
+// Routes Equipaments
+ //equipaments
+ Route.get('/equipments', 'EquipmentController.index')
+ Route.get('/equipments/:id', 'EquipmentController.show')
+ Route.post('/equipments', 'EquipmentController.store').validator('EquipmentRenting')
+ Route.put('/equipments/:id', 'EquipmentController.update').validator('EquipmentRenting')
+ Route.delete('/equipments/:id', 'EquipmentController.destroy')
+//equipaments
+
+ //equipament-renting
+ Route.get('/equipment-renting', 'EquipmentRentingController.index')
+ Route.get('/equipment-renting/:id', 'EquipmentRentingController.show')
+ Route.post('/equipment-renting', 'EquipmentRentingController.store').validator('EquipmentRenting')
+ Route.put('/equipment-renting/:id', 'EquipmentRentingController.update').validator('EquipmentRenting')
+ Route.delete('/equipment-renting/:id', 'EquipmentRentingController.destroy')
+//equipament-renting
+
+ //equipament-classifications
+ Route.get('/equipment-classifications', 'EquipmentClassificationController.index')
+ Route.get('/equipment-classifications/:id', 'EquipmentClassificationController.show')
+ Route.post('/equipment-classifications', 'EquipmentClassificationController.store').validator('EquipmentClassification')
+ Route.put('/equipment-classifications/:id', 'EquipmentClassificationController.update').validator('EquipmentClassification')
+ Route.delete('/equipment-classifications/:id', 'EquipmentClassificationController.destroy')
+//equipament-classifications
+
+//equipment-brand
+Route.get('/equipment-brand', 'EquipmentBrandController.index')
+Route.get('/equipment-brand/:id', 'EquipmentBrandController.show')
+Route.post('/equipment-brand', 'EquipmentBrandController.store').validator('EquipmentBrand')
+Route.put('/equipment-brand/:id', 'EquipmentBrandController.update').validator('EquipmentBrand')
+Route.delete('/equipment-brand/:id', 'EquipmentBrandController.destroy')
+//equipment-brand
+
+//equipment-proprietary
+Route.get('/equipment-proprietary', 'EquipmentProprietaryController.index')
+Route.get('/equipment-proprietary/:id', 'EquipmentProprietaryController.show')
+Route.post('/equipment-proprietary', 'EquipmentProprietaryController.store').validator('EquipmentProprietary')
+Route.put('/equipment-proprietary/:id', 'EquipmentProprietaryController.update').validator('EquipmentProprietary')
+Route.delete('/equipment-proprietary/:id', 'EquipmentProprietaryController.destroy')
+//equipment-proprietary
+
+
+}).middleware(['auth'])
+
