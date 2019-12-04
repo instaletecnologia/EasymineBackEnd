@@ -1,0 +1,17 @@
+Run project in Dev:
+adonis serve --dev
+
+
+Add new migration (Exemplo)
+adonis make:migration users
+run migration
+adonis migration:run
+
+add model (Exemplo)
+adonis make:model User
+
+add controller (Exemplo)
+adonis make:controller EquipmentClassification
+
+add Validator (Exemplo)
+adonis make:validator User

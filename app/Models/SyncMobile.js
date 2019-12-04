@@ -3,14 +3,14 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
-class EquipamentoLocatario extends Model {
+class SyncMobile extends Model {
 
   static get table () {
-    return 'dbo.EquipamentosAlocador'
+    return 'sync.SyncMobile'
   }
 
   static get primaryKey () {
-    return 'EquipamentoLocatarioID'
+    return 'SyncMobileID'
   }
 
   static get incrementing () {
@@ -27,12 +27,18 @@ class EquipamentoLocatario extends Model {
 
   static get visible(){
     return [
-      'EquipamentoLocatarioID',
-      'Descricao',
-      'Ativo'
+      'SyncMobileID',
+      'EquipamentoID',
+      'RegistroID',
+      'DescricaoTabela',
+      'TipoOperacao',
+      'DataCadastro',
+      'Status',
+      'DataAlteracaoStatus',
+      'Url'
     ]
   }
 
 }
 
-module.exports = EquipamentoLocatario
+module.exports = SyncMobile

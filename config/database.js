@@ -102,7 +102,10 @@ module.exports = {
       database: Env.get('DB_DATABASE', 'adonis'), //azure database
       options: {
         encrypt: true   // use this for Azure database encryption
-      }
+      },
+      migrations:{
+        tableName:"knex_migrations"
+    },
     },
     // connection: 'mssql://sa:InsDES425@oraculo.cloudapp.net/Easymine_PeD?encrypt=true',
     debug: Env.get('DB_DEBUG', false)

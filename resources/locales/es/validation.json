@@ -1,0 +1,56 @@
+{
+  "above": "El {{field}} debe estar por encima de {{argumento.0}}",
+  "accept": "El {{field}} debería haber sido aceptado",
+  "after": "El {{field}} debe ser una fecha posterior a {{argumento.0}}",
+  "after_offset_of":
+    "El {{campo}} debe estar después de {{argumento.0}} {{argumento.1}} a partir de la fecha de hoy",
+  "alpha": "El {{field}} debe contener solo letras",
+  "alpha_numeric": "El {{field}} debe contener solo letras y números",
+  "array": "El {{field}} debería ser un ARRAY",
+  "before": "El {{field}} debe ser una fecha anterior a {{argumento.0}}",
+  "before_offset_of":
+    "El {{campo}} debe estar antes del {{argumento.0}} {{argumento.1}} a partir de la fecha de hoy",
+  "Entre":
+    "El {{campo}} debe estar entre {{argumento.0}} y {{argumento.1}}",
+  "boolean": "El {{field}} debe ser verdadero o falso",
+  "confirm": "La confirmación {{field}} no coincide",
+  "date": "El {{field}} debe ser una fecha válida",
+  "formato de fecha":
+    "El {{campo}} debe ser una fecha válida de acuerdo con el formato dado {{argumento.0}}",
+  "different": "{{field}} y {{argumento.0}} deberían ser diferentes",
+  "email": "El {{field}} debe ser una dirección de correo electrónico válida",
+  "ends_with": "El {{campo}} debe terminar con las letras dadas ({{argumento}})",
+  "igual": "El {{campo}} debería ser igual a {{argumento.0}}",
+  "in": "El {{field}} debe estar dentro de los valores definidos de ({{argumento}})",
+  "incluye": "El {{campo}} debe incluir letras de definición ({{argumento}})",
+  "integer": "El {{field}} debe ser un INTEGER",
+  "ip": "El {{field}} debe ser una dirección IP válida",
+  "ipv4": "El {{campo}} debe ser una dirección IPV4 válida",
+  "ipv6": "El {{campo}} debe ser una dirección IPV6 válida",
+  "json": "El {{field}} debe ser una cadena JSON válida",
+  "max": "El {{field}} no debe ser más que {{argumento.0}}",
+  "min": "El {{campo}} no debe ser menor que {{argumento.0}}",
+  "not_equals": "El {{campo}} debe ser diferente de {{argumento.0}}",
+  "not_in": "El {{campo}} no debe ser uno de ({{argumento}})",
+  "object": "El {{field}} debe ser un OBJETO válido",
+  "range": "El {{field}} debe estar entre {{argumento.0}} y {{argumento.1}}",
+  "regex": "El formato {{field}} no es válido",
+  "required": "El {{field}} es obligatorio",
+  "required_if": "El {{field}} es obligatorio cuando existen {{argumento.0}}",
+  "required_when":
+    "El {{field}} es obligatorio cuando el valor de {{argumento.0}} es igual a {{argumento.1}}",
+  "requerido_con_todos":
+    "El {{campo}} es obligatorio cuando todos ({{argumento}}) están presentes",
+  "required_with_any":
+    "El {{campo}} es obligatorio cuando cualquiera de ({{argumento}}) está presente",
+  "required_without_all":
+    "El {{campo}} es obligatorio cuando ninguno de ({{argumento}}) está presente",
+  "required_without_any":
+    "El {{campo}} es obligatorio cuando cualquiera de ({{argumento}}) está presente",
+  "same": "El {{field}} y {{argumento.0}} deben coincidir",
+  "comienza con": "El {{campo}} debe comenzar con las letras dadas ({{argumento}})",
+  "string": "El {{field}} debe ser un STRING",
+  "under": "El {{field}} debe estar debajo de {{argumento.0}}",
+  "unique": "El {{field}} ya ha sido tomado por otra persona",
+  "url": "El {{field}} debe ser una url válida"
+}

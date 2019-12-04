@@ -3,8 +3,9 @@
 const User = use("App/Models/Usuarios")
 const Defaults = use('App/Defaults/Dates')
 
-class UserController {
+class ExempleController {
 
+  //Listar todos registros de acordo com a pagina e a quantidade de itens por pagina
   async index({ request }){
     let { page, perPage } = request.all()
 
@@ -12,7 +13,7 @@ class UserController {
 
     return user
   }
-
+ // Criar novo registro;
   async store({ request, auth }){
 
     const data = request.only([
@@ -43,8 +44,8 @@ class UserController {
         Input: data.input,
         UsuarioSetorID: data.userSectorID,
         UsuarioPermissaoID : data.userPermissionID,
-        UsuarioRegistroID: 2115,
-        UsuarioAtualizaID : 2115,
+        UsuarioRegistroID: auth.user.UsuarioID,
+        UsuarioAtualizaID : auth.user.UsuarioID,
         DataCadastro : newcurrentDate,
         DataAtualizacao: newcurrentDate,
         LastEditDate: newcurrentDate,
@@ -54,13 +55,13 @@ class UserController {
 
     return user
   }
-
+ //Exibir um registro;
   async show ({ params }) {
     const user = await User.findOrFail(params.id)
 
     return user
   }
-
+//Alterar um registro;
   async update ({ params, request, response, auth }) {
     const user = await User.findOrFail(params.id)
     const data = request.only([
@@ -98,11 +99,11 @@ class UserController {
     return user
 
   }
-
+ // Remover um registro, porem não permitido excluir itens apos o cadastro.
   async destroy ({ params, response }) {
     return response.status('401').send({ error: {message: 'Unable to delete the registration, disable it.'} })
   }
 
 }
 
-module.exports = UserController
+module.exports = ExempleController
