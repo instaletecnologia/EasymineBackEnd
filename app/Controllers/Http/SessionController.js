@@ -6,6 +6,13 @@ class SessionController {
    return auth.user
   }
 
+  async revokeToken ({ auth }) {
+    const apiToken = auth.getAuthHeader()
+    auth.revokeTokens([apiToken], true)
+
+    return true
+  }
+
   async store ({ request, response, auth }) {
     const { Login, password } = request.all()
 
@@ -13,6 +20,7 @@ class SessionController {
 
     return token
   }
+
 }
 
 module.exports = SessionController

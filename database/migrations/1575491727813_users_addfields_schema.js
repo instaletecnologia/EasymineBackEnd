@@ -5,18 +5,18 @@ const Schema = use('Schema')
 
 class UsersAddfieldsSchema extends Schema {
   up () {
-    this.table('users_addfields', (table) => {
-      table.string('password', 60).notNullable()
+    this.table('Usuarios', (table) => {
+      table.string('Senha', 60).notNullable().alter()
       table.string('token').nullable()
       table.datetime('token_created_at').nullable()
     })
   }
 
   down () {
-    this.table('users_addfields', (table) => {
-      table.string('password', 50).notNullable()
-      table.string('token').nullable()
-      table.datetime('token_created_at').nullable()
+    this.table('Usuarios', (table) => {
+      table.string('Senha', 50).notNullable().alter()
+      table.dropColumn('token')
+      table.dropColumn('token_created_at')
     })
   }
 }
