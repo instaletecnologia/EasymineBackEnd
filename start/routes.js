@@ -90,3 +90,10 @@ Route.group (() => {
     Route.delete('/equipment-proprietary/:id', 'EquipmentProprietaryController.destroy')
     //equipment-proprietary
 }).middleware(['auth'])
+
+Route.group(() => {
+    Route.get('/test', ({ response }) => response.send({ ok: true }))
+    Route.get('/equipments', 'EquipmentController.index')
+    Route.get('/equipments/initial-load', 'EquipmentController.initialLoad')
+    Route.get('/equipments/file-download', 'EquipmentController.fileDownload')
+}).prefix('api/v1')

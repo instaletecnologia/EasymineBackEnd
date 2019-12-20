@@ -19,7 +19,7 @@ class Equipamento extends Model {
 
   static get visible(){
     return [
-      'EquipamentoID', 'TagPrefixo', 'TagNumero', 'Habilitado',
+      'EquipamentoID', 'EquipamentoTipoID', 'TagPrefixo', 'TagNumero', 'Habilitado', 'Ativo',
     ]
   }
 
