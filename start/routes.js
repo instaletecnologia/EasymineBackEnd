@@ -96,4 +96,5 @@ Route.group(() => {
     Route.get('/equipments', 'EquipmentController.index')
     Route.get('/equipments/initial-load', 'EquipmentController.initialLoad')
     Route.get('/equipments/file-download', 'EquipmentController.fileDownload')
+    Route.delete('/equipments/file-download', 'EquipmentController.fileDownloadDelete')
 }).prefix('api/v1')

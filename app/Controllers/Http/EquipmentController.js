@@ -127,7 +127,7 @@ class EquipmentController {
         o.[DataAlteracao],
         o.[UsuarioRegistroID],
         o.[UsuarioAtualizaID],
-        o.[Imagem],
+        CAST(N'' AS XML).value('xs:base64Binary(xs:hexBinary(sql:column("o.[Imagem]")))', 'NVARCHAR(MAX)') [Imagem],
         CAST(null as varbinary) as [ImagemTransicao],
         o.[SairDoSistema],
         o.[TempoMaximoMinutos],
@@ -177,9 +177,10 @@ class EquipmentController {
       realtime: Env.get('MICROSERVICE_REALTIME'),
     }
     const fileName = (new Date()).getTime()
+    const downloadUrl = `${Env.get('APP_URL')}/api/v1/equipments/file-download`
     await Drive.put(`initial-load/${fileName}.json`, Buffer.from(JSON.stringify(data)))
 
-    return response.send({ fileId: fileName })
+    return response.send({ fileId: fileName, downloadUrl })
 
   }
 
@@ -187,6 +188,14 @@ class EquipmentController {
 
     const { fileId } = request.all()
     return response.attachment(Helpers.tmpPath(`initial-load/${fileId}.json`))
+
+  }
+
+  async fileDownloadDelete({ response, request }){
+
+    const { fileId } = request.all()
+    await Drive.delete(`initial-load/${fileId}.json`)
+    return response.send({ ok: true })
 
   }
 
