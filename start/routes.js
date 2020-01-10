@@ -37,6 +37,9 @@ Route.group (() => {
     Route.get('/files/:id', 'FileController.show')
     Route.post('/files', 'FileController.store')
 
+    Route.get('/avatar-equipment-type/:id', 'FileController.showEquipmentTypes')
+    Route.post('/avatar-equipment-type', 'FileController.storeEquipmentTypes')
+
     //Routes Session
     Route.get('/sessions/currentUser', 'SessionController.currentUser')
     Route.post('/sessions/revokeToken', 'SessionController.revokeToken')
@@ -44,6 +47,7 @@ Route.group (() => {
 
     //Routes Users
     Route.get('/users', 'UserController.index')
+    Route.get('/users-mechanical', 'UserController.indexSelectMechanical')
     Route.get('/users/:id', 'UserController.show')
     Route.put('/users/:id', 'UserController.update').validator('User/update')
     Route.delete('/users/:id', 'UserController.destroy')
@@ -52,6 +56,7 @@ Route.group (() => {
     // Routes Equipaments
     //equipaments
     Route.get('/equipments', 'EquipmentController.index')
+    Route.get('/equipments-select-tag', 'EquipmentController.indexSelectTag')
     Route.get('/equipments/:id', 'EquipmentController.show')
     Route.post('/equipments', 'EquipmentController.store').validator('EquipmentRenting')
     Route.put('/equipments/:id', 'EquipmentController.update').validator('EquipmentRenting')
@@ -89,6 +94,10 @@ Route.group (() => {
     Route.put('/equipment-proprietary/:id', 'EquipmentProprietaryController.update').validator('EquipmentProprietary')
     Route.delete('/equipment-proprietary/:id', 'EquipmentProprietaryController.destroy')
     //equipment-proprietary
+
+    //Maintenance
+    Route.get('/maintenance-equipments', 'MaintenanceEquipmentController.getMaintenanceEquipments')
+    //Maintenance
 }).middleware(['auth'])
 
 Route.group(() => {
