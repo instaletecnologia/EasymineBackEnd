@@ -16,7 +16,7 @@ class EquipmentController {
 
     const userQuery = await Database.raw(
       `
-      SELECT 
+      SELECT
         UsuarioID,
         Nome,
         UsuarioSetorID,
@@ -27,28 +27,28 @@ class EquipmentController {
         Login,
         TipoLogin,
         Ativo
-      FROM 
+      FROM
         Usuarios WITH (NOLOCK)
-      ORDER BY 
+      ORDER BY
         UsuarioID
       `
     )
 
     const checklistQuery = await Database.raw(
       `
-      SELECT 
+      SELECT
         CheckListID,
         EquipamentoTipoID,
         Descricao,
         Ativo,
         Tipo,
         ISNULL(InviabilizaOperacao,0) as InviabilizaOperacao
-	    FROM 
-			  CheckLists c (NOLOCK) 
-	    WHERE  
+	    FROM
+			  CheckLists c (NOLOCK)
+	    WHERE
         EquipamentoTipoID = ${EquipamentoTipoID}
         AND Ativo = 1
-      ORDER BY 
+      ORDER BY
         CheckListID
       `
     )
@@ -57,25 +57,25 @@ class EquipmentController {
 
     const checkListNonConformitiesQuery = await Database.raw(
       `
-      SELECT   
-        co.CheckListConformidadeID, 
-        co.CheckListID, co.Descricao, 
-        co.Ok, 
-        co.Ativo, 
-        co.Inopera, 
-        co.ChekListCriterioID, 
-        co.Urgencia 
-      FROM 
-        CheckListConformidades co (NOLOCK) 
+      SELECT
+        co.CheckListConformidadeID,
+        co.CheckListID, co.Descricao,
+        co.Ok,
+        co.Ativo,
+        co.Inopera,
+        co.ChekListCriterioID,
+        co.Urgencia
+      FROM
+        CheckListConformidades co (NOLOCK)
       INNER JOIN CheckLists cl (NOLOCK) on cl.CheckListID = co.CheckListID
-      WHERE 
+      WHERE
         co.Ok = 0 AND cl.ChecKlistID IN (${checkListIds})
       `
     )
 
     const checklistConformitiesQuery = await Database.raw(
       `
-      SELECT 
+      SELECT
         l.CheckListLanctoID,
         l.CheckListID,
         l.EquipamentoID,
@@ -90,23 +90,23 @@ class EquipmentController {
         l.CreationDate,
         l.Observacao,
         l.UsuarioAtualizaID
-      FROM 
+      FROM
         CheckListLancamentos l (NOLOCK)
         INNER JOIN CheckLists c (NOLOCK) on c.CheckListID = l.CheckListID and EquipamentoTipoID = c.EquipamentoTipoID
-      WHERE 
+      WHERE
         1=1
 			  AND EquipamentoID = ${EquipamentoID}
         AND CheckListLanctoID in (
           SELECT MIN(CheckListLanctoID) as CheckListLanctoID
 					from CheckListLancamentos
-          where 
-            1=1 
+          where
+            1=1
 						AND SituacaoInicial = 0
 						AND EquipamentoID = ${EquipamentoID}
 						AND SituacaoFinal is null
           GROUP BY EquipamentoID, CheckListID
         )
-	      ORDER BY 
+	      ORDER BY
 			    CheckListLanctoID
       `
     )
@@ -139,9 +139,9 @@ class EquipmentController {
       INNER JOIN ocorrenciasTipos as ot with (nolock) on ot.OcorrenciaTipoID = o.OcorrenciaTipoID
       INNER JOIN CategoriasTempo as ct with (nolock) on ct.idCategoriasTempo = o.idCategoriasTempo
       LEFT JOIN CategoriasTempo as ctp with (nolock) on ctp.idCategoriasTempo = ct.ParentID
-      WHERE 
-        o.equipamentoTipoID = ${EquipamentoTipoID} 
-	      AND (o.Ativo = 1) 
+      WHERE
+        o.equipamentoTipoID = ${EquipamentoTipoID}
+	      AND (o.Ativo = 1)
 	      AND (o.Acao = 'M')
       ORDER BY o.[CicloOrdenacao]
       `
@@ -149,7 +149,7 @@ class EquipmentController {
 
     const operationQuery = await Database.raw(
       `
-      SELECT 
+      SELECT
         op.OperacaoID,
         op.FrenteID,
         f.Descricao as FrenteDescricao,
@@ -157,16 +157,16 @@ class EquipmentController {
         fd.Descricao as FrenteLocalDestino,
         cast( null as int) as EquipamentoCargaID,
         cast( null as varchar(100)) as TagCarga
-      FROM dbo.Operacoes as op 
+      FROM dbo.Operacoes as op
       INNER JOIN frentes as f on f.frenteID = op.frenteID
       LEFT JOIN [dbo].[FrentesLocais] as fo on fo.FrenteLocalID = f.FrenteLocalOrigemID
       LEFT JOIN [dbo].[FrentesLocais] as fd on fd.FrenteLocalID = f.FrenteLocalDestinoID
-      WHERE 
-        op.equipamentoid = ${EquipamentoID} 
+      WHERE
+        op.equipamentoid = ${EquipamentoID}
         AND op.datafim IS NULL
       `
     )
-    
+
     const data = {
       userQuery,
       checklistQuery,
@@ -193,9 +193,18 @@ class EquipmentController {
   async index ({ request, response, view }) {
     let { page, perPage } = request.all()
 
-    const equipment = await Equipment.query().paginate(page ? page : 1, perPage ? perPage : 20)
+    const equipments = await Equipment.query().paginate(page ? page : 1, perPage ? perPage : 20)
 
-    return equipment
+    return equipments
+  }
+
+  async indexSelectTag ({ request, response, view }) {
+    const equipments = await Equipment.query()
+    .where('Ativo', true)
+    .orderBy('TagPrefixo', 'TagNumero', 'desc')
+    .fetch()
+
+    return equipments
   }
 
   async store({ request, auth }){
