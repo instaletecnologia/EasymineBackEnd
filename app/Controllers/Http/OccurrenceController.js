@@ -5,15 +5,15 @@ const Database = use('Database')
 
 class OccurrenceController {
 
-  async indexOcorrenceByMaintenanceType ({ params }) {
+  async indexOcorrenceByMaintenanceType ({ request }) {
+
+    const { maintenanceType, equipmentId } = request.all()
+
     const query = await Database
-    .select('man.ClassesFalhas.ClasseFalhaID','man.ClassesFalhas.Descricao')
+    .select('dbo.Ocorrencias.OcorrenciaID', 'dbo.OcorrenciasTipos.Descricao')
     .from('dbo.Ocorrencias')
     .innerJoin('dbo.OcorrenciasTipos', 'dbo.OcorrenciasTipos.OcorrenciaTipoID', 'dbo.Ocorrencias.OcorrenciaTipoID')
     .where({ 'dbo.Ocorrencias.Ativo': true })
-    .where({'dbo.Ocorrencias.idCategoriasTempo': params.idCategoriasTempo})
-    .where({'dbo.Ocorrencias.EquipamentoTipoID': params.EquipamentoTipoID})
-    .orderBy('dbo.OcorrenciasTipos.Descricao', 'desc')
 
     return query
   }

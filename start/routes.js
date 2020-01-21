@@ -106,7 +106,7 @@ Route.group (() => {
     //Maintenance Failure Class
 
     //Maintenance Occorrence
-    Route.get('/maintenance-ocorrence-by-type', 'MaintenanceEquipmentController.indexOcorrenceByMaintenanceType')
+    Route.get('/maintenance-ocorrence-by-type', 'OccurrenceController.indexOcorrenceByMaintenanceType')
     //Maintenance Occorrence
 
     //Maintenance
