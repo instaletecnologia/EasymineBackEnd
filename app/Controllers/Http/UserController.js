@@ -24,6 +24,16 @@ class UserController {
     return users
   }
 
+  async indexActive ({ request, response, view }) {
+    const users = await User.query()
+    .select('UsuarioID','Nome', 'Chapa', 'UsuarioPermissaoID')
+    .where('Ativo', true)
+    .orderBy('Nome', 'desc')
+    .fetch()
+
+    return users
+  }
+
   async store({ request, auth }){
 
     const data = request.only([

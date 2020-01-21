@@ -48,6 +48,7 @@ Route.group (() => {
     //Routes Users
     Route.get('/users', 'UserController.index')
     Route.get('/users-mechanical', 'UserController.indexSelectMechanical')
+    Route.get('/users-active', 'UserController.indexActive')
     Route.get('/users/:id', 'UserController.show')
     Route.put('/users/:id', 'UserController.update').validator('User/update')
     Route.delete('/users/:id', 'UserController.destroy')
@@ -97,7 +98,20 @@ Route.group (() => {
 
     //Maintenance
     Route.get('/maintenance-equipments', 'MaintenanceEquipmentController.getMaintenanceEquipments')
+    Route.get('/maintenance-equipments', 'MaintenanceEquipmentController.store')
+
+    //Maintenance Failure Class
+    Route.get('/maintenance-failure-class/:id', 'MaintenanceFailureClassController.show')
+    Route.get('/maintenance-failure-class-time-category/:id', 'MaintenanceFailureClassController.showFailureClassTimeCategory')
+    //Maintenance Failure Class
+
+    //Maintenance Occorrence
+    Route.get('/maintenance-ocorrence-by-type', 'MaintenanceEquipmentController.indexOcorrenceByMaintenanceType')
+    //Maintenance Occorrence
+
     //Maintenance
+
+
 }).middleware(['auth'])
 
 Route.group(() => {
