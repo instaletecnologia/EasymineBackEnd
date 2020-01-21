@@ -17,16 +17,16 @@ class EquipmentController {
     const userQuery = await Database.raw(
       `
       SELECT 
-        UsuarioID,
-        Nome,
-        UsuarioSetorID,
-        Chapa,
-        Senha,
-        UsuarioPermissaoID,
-        LastEditDate,
-        Login,
-        TipoLogin,
-        Ativo
+        UsuarioID as usuarioID,
+        Nome as nome,
+        UsuarioSetorID as usuarioSetorID,
+        Chapa as chapa,
+        Senha as senha,
+        UsuarioPermissaoID as usuarioPermissaoID,
+        LastEditDate as lastEditDate,
+        Login as login,
+        TipoLogin as tipoLogin,
+        Ativo as ativo
       FROM 
         Usuarios WITH (NOLOCK)
       ORDER BY 
