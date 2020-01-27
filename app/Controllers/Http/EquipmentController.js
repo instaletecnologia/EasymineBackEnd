@@ -179,7 +179,9 @@ class EquipmentController {
     const fileName = (new Date()).getTime()
     await Drive.put(`initial-load/${fileName}.json`, Buffer.from(JSON.stringify(data)))
 
-    return response.send({ fileId: fileName })
+    const DOWNLOAD_URL = `${Env.get('APP_URL')}/api/v1/equipments/file-download`
+
+    return response.send({ fileId: fileName, DOWNLOAD_URL })
 
   }
 
