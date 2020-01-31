@@ -15,3 +15,5 @@ adonis make:controller EquipmentClassification
 
 add Validator (Exemplo)
 adonis make:validator User
+
+adonis make:hook User

@@ -7,6 +7,7 @@ const Helpers = use('Helpers')
 const Defaults = use('App/Defaults/Dates')
 const Equipment = use('App/Models/Equipamento')
 const NewcurrentDate = Defaults.currentDate()
+const RulesBusinessEquipment = use('App/RulesBusiness/RulesBusinessEquipment')
 
 class EquipmentController {
 
@@ -199,12 +200,11 @@ class EquipmentController {
   }
 
   async indexSelectTag ({ request, response, view }) {
-    const equipments = await Equipment.query()
-    .where('Ativo', true)
-    .orderBy('TagPrefixo', 'TagNumero', 'desc')
-    .fetch()
+    return await RulesBusinessEquipment.EquipmentGetAcitive();
+  }
 
-    return equipments
+  async indexSelectTagNoInMaintenance ({ request, response, view }) {
+    return await RulesBusinessEquipment.EquipmentGetAcitiveNoInMaintenance();
   }
 
   async store({ request, auth }){

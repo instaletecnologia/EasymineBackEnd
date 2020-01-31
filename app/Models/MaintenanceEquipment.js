@@ -17,6 +17,14 @@ class MaintenanceEquipment extends Model {
     return true
   }
 
+  static get createdAtColumn () {
+    return null
+  }
+
+  static get updatedAtColumn () {
+    return null
+  }
+
   static get visible(){
     return [
       'EquipamentoManutencaoID',

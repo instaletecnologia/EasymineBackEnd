@@ -58,6 +58,7 @@ Route.group (() => {
     //equipaments
     Route.get('/equipments', 'EquipmentController.index')
     Route.get('/equipments-select-tag', 'EquipmentController.indexSelectTag')
+    Route.get('/equipments-select-tag-not-in-maintenance', 'EquipmentController.indexSelectTagNoInMaintenance')
     Route.get('/equipments/:id', 'EquipmentController.show')
     Route.post('/equipments', 'EquipmentController.store').validator('EquipmentRenting')
     Route.put('/equipments/:id', 'EquipmentController.update').validator('EquipmentRenting')
@@ -98,16 +99,33 @@ Route.group (() => {
 
     //Maintenance
     Route.get('/maintenance-equipments', 'MaintenanceEquipmentController.getMaintenanceEquipments')
-    Route.get('/maintenance-equipments', 'MaintenanceEquipmentController.store')
+    Route.post('/maintenance-equipments', 'MaintenanceEquipmentController.store')
 
     //Maintenance Failure Class
     Route.get('/maintenance-failure-class/:id', 'MaintenanceFailureClassController.show')
-    Route.get('/maintenance-failure-class-time-category/:id', 'MaintenanceFailureClassController.showFailureClassTimeCategory')
+    Route.get('/maintenance-failure-class-time-category', 'MaintenanceFailureClassController.showFailureClassTimeCategory')
     //Maintenance Failure Class
 
     //Maintenance Occorrence
     Route.get('/maintenance-ocorrence-by-type', 'OccurrenceController.indexOcorrenceByMaintenanceType')
     //Maintenance Occorrence
+
+    //Maintenance Equipment ControlHour
+    Route.post('/maintenance-equipment-control-hour', 'EquipmentControlHourController.storeMaintenance')
+    Route.post('/maintenance-equipment-release-control-hour', 'EquipmentControlHourController.storeMaintenanceRelease')
+    //Maintenance Equipment ControlHour
+
+     //Maintenance Item
+     Route.get('/maintenance-items', 'MaintenanceItemController.showMaintenanceItemByClasseFalhaIDByEquipamentoModeloID')
+     //Maintenance Item
+
+    //Maintenance Reason
+    Route.get('/maintenance-reason', 'MaintenanceReasonController.indexAll')
+    //Maintenance Reason
+
+    //Maintenance Order
+    Route.get('/maintenance-order', 'MaintenanceOrderController.showMaintenanceOrdersByEquipmentIDByCategoryTimeID')
+    //Maintenance Order
 
     //Maintenance
 
