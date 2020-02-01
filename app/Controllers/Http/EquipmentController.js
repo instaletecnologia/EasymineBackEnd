@@ -16,18 +16,18 @@ class EquipmentController {
 
     const userQuery = await Database.raw(
       `
-      SELECT
-        UsuarioID,
-        Nome,
-        UsuarioSetorID,
-        Chapa,
-        Senha,
-        UsuarioPermissaoID,
-        LastEditDate,
-        Login,
-        TipoLogin,
-        Ativo
-      FROM
+      SELECT 
+        UsuarioID as usuarioID,
+        Nome as nome,
+        UsuarioSetorID as usuarioSetorID,
+        Chapa as chapa,
+        Senha as senha,
+        UsuarioPermissaoID as usuarioPermissaoID,
+        LastEditDate as lastEditDate,
+        Login as login,
+        TipoLogin as tipoLogin,
+        Ativo as ativo
+      FROM 
         Usuarios WITH (NOLOCK)
       ORDER BY
         UsuarioID
@@ -127,7 +127,7 @@ class EquipmentController {
         o.[DataAlteracao],
         o.[UsuarioRegistroID],
         o.[UsuarioAtualizaID],
-        o.[Imagem],
+        CAST(N'' AS XML).value('xs:base64Binary(xs:hexBinary(sql:column("o.[Imagem]")))', 'NVARCHAR(MAX)') [Imagem],
         CAST(null as varbinary) as [ImagemTransicao],
         o.[SairDoSistema],
         o.[TempoMaximoMinutos],
@@ -189,6 +189,14 @@ class EquipmentController {
 
     const { fileId } = request.all()
     return response.attachment(Helpers.tmpPath(`initial-load/${fileId}.json`))
+
+  }
+
+  async fileDownloadDelete({ response, request }){
+
+    const { fileId } = request.all()
+    await Drive.delete(`initial-load/${fileId}.json`)
+    return response.send({ ok: true })
 
   }
 
