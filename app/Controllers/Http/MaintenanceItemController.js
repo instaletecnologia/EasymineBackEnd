@@ -22,16 +22,29 @@ class MaintenanceItemController {
     return maintenanceItem
   }
 
-  async showMaintenanceItemByClasseFalhaIDByEquipamentoModeloID ({ params }) {
+  async showMaintenanceItemByClasseFalhaIDByEquipamentoModeloID ({ request, response }) {
+    const { ClasseFalhaID, EquipamentoModeloID } = request.all()
+
+   if (!ClasseFalhaID) {
+     return response
+     .status(404)
+     .json({ message: "maintenance.error.release.WithoutOccurrence" })
+   }
+
+   if (!EquipamentoModeloID) {
+     return response
+     .status(404)
+     .json({ message: "maintenance.error.release.WithoutOccurrence" })
+  }
 
    const manutencaoItens = await Database
    .select('man.ManutencaoItens.ManutencaoItenID','man.ManutencaoItens.Descricao')
    .from('man.ManutencaoItensEquipamentosModelos')
-   .innerJoin('man.ManutencaoItens', 'man.ClassesFalhas.ManutencaoItenID', 'man.ManutencaoItensEquipamentosModelos.ManutencaoItenID')
+   .innerJoin('man.ManutencaoItens', 'man.ManutencaoItens.ManutencaoItenID', 'man.ManutencaoItensEquipamentosModelos.ManutencaoItenID')
    .leftJoin('man.ManutencaoItensEquiModelosEquiTipos','man.ManutencaoItensEquiModelosEquiTipos.ManutencaoItenEquipamentoModeloID', 'man.ManutencaoItensEquipamentosModelos.ManutencaoItenEquipamentoModeloID')
    .where({ 'man.ManutencaoItens.Ativo': true })
-   .where({'man.ManutencaoItensEquipamentosModelos.EquipamentoModeloID': params.EquipamentoModeloID})
-   .where({'man.ManutencaoItensEquipamentosModelos.ClasseFalhaID': params.ClasseFalhaID})
+   .where({'man.ManutencaoItensEquipamentosModelos.EquipamentoModeloID': EquipamentoModeloID})
+   .where({'man.ManutencaoItens.ClasseFalhaID': ClasseFalhaID})
 
    return manutencaoItens
   }

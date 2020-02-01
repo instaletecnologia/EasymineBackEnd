@@ -1,5 +1,4 @@
 'use strict'
-MotivosManutencao
 
 const MaintenanceReason = use('App/Models/MaintenanceReason')
 const Database = use('Database')
@@ -14,12 +13,12 @@ class MaintenanceReasonController {
   }
 
   async indexAll ({ request, response, view }) {
+console.log('entrei')
     const maintenanceReason = await Database
-   .select('*')
+   .select('man.MotivosManutencao.MotivoManutencaoID','man.MotivosManutencao.Descricao')
    .from('man.MotivosManutencao')
-   .where({ 'man.MotivosManutencao.Ativo': true })
-
-
+   //.where({ 'man.MotivosManutencao.Ativo': true })
+   console.log('sai')
     return maintenanceReason
   }
 
