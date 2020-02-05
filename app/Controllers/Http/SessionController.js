@@ -2,6 +2,8 @@
 
 const Database = use('Database')
 const _ = require('lodash')
+const crypto = require( 'crypto-js')
+const Env = use('Env')
 
 class SessionController {
 
@@ -10,23 +12,23 @@ class SessionController {
     const user = auth.user.toJSON()
     const permissions = await Database.raw(
       `
-      SELECT     
-        R.ID_AREA as AreaID, 
-        R.DESCRICAO AS AreaDescricao, 
-        A.ID_APLICACAO AS ModuloID, 
-        A.DESCRICAO AS ModuloDescricao, 
+      SELECT
+        R.ID_AREA as AreaID,
+        R.DESCRICAO AS AreaDescricao,
+        A.ID_APLICACAO AS ModuloID,
+        A.DESCRICAO AS ModuloDescricao,
         F.DIRETORIO AS Diretorio,
-        F.ID_FUNCIONALIDADE as FuncionalidadeID, 
-        F.DESCRICAO AS Funcionalidade, 
+        F.ID_FUNCIONALIDADE as FuncionalidadeID,
+        F.DESCRICAO AS Funcionalidade,
         F.FORMULARIO AS Formulario
-      FROM   sic.TB_ACT_APLICACAO AS A 
-        INNER JOIN sic.TB_ACT_AREA AS R ON R.ID_AREA = A.ID_AREA 
-        INNER JOIN sic.TB_ACT_FUNCIONALIDADE AS F ON A.ID_APLICACAO = F.ID_APLICACAO 
-        INNER JOIN sic.TB_ACT_PERMISSAO AS P ON P.ID_FUNCIONALIDADE = F.ID_FUNCIONALIDADE 
+      FROM   sic.TB_ACT_APLICACAO AS A
+        INNER JOIN sic.TB_ACT_AREA AS R ON R.ID_AREA = A.ID_AREA
+        INNER JOIN sic.TB_ACT_FUNCIONALIDADE AS F ON A.ID_APLICACAO = F.ID_APLICACAO
+        INNER JOIN sic.TB_ACT_PERMISSAO AS P ON P.ID_FUNCIONALIDADE = F.ID_FUNCIONALIDADE
         INNER JOIN Usuarios AS U ON U.UsuarioID = P.ID_USUARIO
-      WHERE     
-        (A.ATIVO = 1)    
-        AND P.ID_USUARIO = ${user.UsuarioID}  
+      WHERE
+        (A.ATIVO = 1)
+        AND P.ID_USUARIO = ${user.UsuarioID}
         AND ISNULL(DESCONTINUADO,0) = 0
         AND R.ATIVO = 1
         AND F.ATIVO = 1
@@ -39,16 +41,16 @@ class SessionController {
 
       if (!Areas.includes(row.AreaID)) Areas.push(row.AreaID)
       if (!Modulos.includes(row.ModuloID)) Modulos.push(row.ModuloID)
-      
+
       const directory = _.snakeCase(row.Diretorio).toUpperCase()
       if (!Diretorios.includes(directory)) Diretorios.push(directory)
-      
+
       if (!Funcionalidades.includes(row.FuncionalidadeID)) Funcionalidades.push(row.FuncionalidadeID)
 
     })
 
     return { ...user, Areas, Modulos, Diretorios, Funcionalidades }
-    
+
   }
 
   async revokeToken ({ auth }) {
@@ -60,8 +62,10 @@ class SessionController {
 
   async store ({ request, response, auth }) {
     const { Login, password } = request.all()
-
-    const token = await auth.attempt(Login, password)
+   console.log(Login);
+   console.log(password);
+    // const token = await auth.attempt(Login, password)
+    const token = await crypto.MD5(password, Env.get('APP_KEY')).toString()
 
     return token
   }
