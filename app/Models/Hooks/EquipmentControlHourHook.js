@@ -2,13 +2,14 @@
 
 const Database = use('Database')
 const RulesBusinessMaintenanceEquipment = use('App/RulesBusiness/RulesBusinessMaintenanceEquipment')
+const RulesBusinessMaintenanceRelease = use('App/RulesBusiness/RulesBusinessMaintenanceRelease')
 const EquipmentControlHourHook = exports = module.exports = {}
 
 // Quando for adicionado um novo registro na controlehoras ID com #MANUTENCAO
 //Inseri na tabela man.EquipamentoManutencoes
 EquipmentControlHourHook.insertMaintenanceEquipment = async (modelInstance) => {
 
-  // adiciona o equipamento e equipamentos manutenção
+  // adiciona o equipamento em equipamentos manutenção
   if(modelInstance.ValorTipo === '#MANUTENCAO' && modelInstance.OcorrenciaTipoID != -12) {
      await RulesBusinessMaintenanceEquipment.MaintenanceEquipmentInsert(
       modelInstance.EquipamentoID,
@@ -26,6 +27,7 @@ EquipmentControlHourHook.insertMaintenanceEquipment = async (modelInstance) => {
       modelInstance.EquipamentoID,
       modelInstance.DataHoraInicio,
       modelInstance.OperadorID);
+
   }
 
 }
