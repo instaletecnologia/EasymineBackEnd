@@ -4,6 +4,7 @@ const Database = use('Database')
 const _ = require('lodash')
 const crypto = require( 'crypto-js')
 const Env = use('Env')
+const User = use("App/Models/Usuarios")
 
 class SessionController {
 
@@ -62,10 +63,21 @@ class SessionController {
 
   async store ({ request, response, auth }) {
     const { Login, password } = request.all()
-   console.log(Login);
-   console.log(password);
+    const passwordCrypto = await crypto.MD5(password).toString().toLocaleUpperCase()
+    const loginUperCase = Login.toLocaleUpperCase()
+
+    const userfind = await Database
+        .select('UsuarioID')
+        .from('dbo.Usuarios')
+        .where({'Login': loginUperCase})
+        .where({'Senha': passwordCrypto})
+
+    console.log(userfind)
+    const user = await User.find(userfind[0].UsuarioID)
+
+    console.log(await auth.generate(user))
     // const token = await auth.attempt(Login, password)
-    const token = await crypto.MD5(password, Env.get('APP_KEY')).toString()
+    const token = await auth.generate(user)
 
     return token
   }
