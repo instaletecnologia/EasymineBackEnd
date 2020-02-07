@@ -10,7 +10,7 @@ class MaintenanceRelease extends Model {
   }
 
   static get primaryKey () {
-    return 'MotivoManutencaoID'
+    return 'ManutencaoLiberacaoEquipamentoOperacaoID'
   }
 
   static get incrementing () {
