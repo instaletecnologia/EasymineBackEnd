@@ -35,8 +35,7 @@ class RulesBusinessEquipmentOperation {
       ,'Obs': note.toString()
       ,'UsuarioRegistroID': userID
       })
-
-       return id
+       return equipmentOperation
   }
   // função responsavel por efetuar o fechamento da ultiam operacao
   static async OperationUpdate(operationID, dateEnd, userID, horimeterEnd) {

@@ -125,6 +125,10 @@ Route.group (() => {
     Route.get('/maintenance-order', 'MaintenanceOrderController.showMaintenanceOrdersByEquipmentIDByCategoryTimeID')
     //Maintenance Order
 
+    //Maintenance Detailing
+    Route.post('/maintenance-detailing', 'MaintenanceDetailingController.store')
+    //Maintenance Detailing
+
     //Maintenance
 
 
