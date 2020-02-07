@@ -27,8 +27,6 @@ Route.post('/forgot-passoword', 'ForgotPasswordController.store')
 Route.put('/forgot-passoword', 'ForgotPasswordController.update')
 
 
-Route.get('/geo-process/coords', 'GeoProcessController.getCoords')
-Route.get('/geo-process/position', 'GeoProcessController.getPosition')
 Route.get('/flux', 'GeoProcessController.getFlux')
 
 // Authenticated only
@@ -138,4 +136,7 @@ Route.group(() => {
     Route.get('/equipments/initial-load', 'EquipmentController.initialLoad')
     Route.get('/equipments/file-download', 'EquipmentController.fileDownload')
     Route.delete('/equipments/file-download', 'EquipmentController.fileDownloadDelete')
+
+    Route.get('/geo-process/coords', 'GeoProcessController.getCoords')
+    Route.get('/geo-process/position', 'GeoProcessController.getPosition')
 }).prefix('api/v1')

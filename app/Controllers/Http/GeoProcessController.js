@@ -42,7 +42,14 @@ class GeoProcessController {
       })
     );
 
-    return equipments;
+    let result = {}
+    equipments.map(equipment => {
+
+      result[equipment.EquipamentoID] = equipment
+      
+    })
+
+    return result;
 
   }
 
