@@ -27,8 +27,6 @@ Route.post('/forgot-passoword', 'ForgotPasswordController.store')
 Route.put('/forgot-passoword', 'ForgotPasswordController.update')
 
 
-Route.get('/geo-process/coords', 'GeoProcessController.getCoords')
-Route.get('/geo-process/position', 'GeoProcessController.getPosition')
 Route.get('/flux', 'GeoProcessController.getFlux')
 
 // Authenticated only
@@ -37,6 +35,9 @@ Route.group (() => {
     Route.get('/files/:id', 'FileController.show')
     Route.post('/files', 'FileController.store')
 
+    Route.get('/avatar-equipment-type/:id', 'FileController.showEquipmentTypes')
+    Route.post('/avatar-equipment-type', 'FileController.storeEquipmentTypes')
+
     //Routes Session
     Route.get('/sessions/currentUser', 'SessionController.currentUser')
     Route.post('/sessions/revokeToken', 'SessionController.revokeToken')
@@ -44,6 +45,8 @@ Route.group (() => {
 
     //Routes Users
     Route.get('/users', 'UserController.index')
+    Route.get('/users-mechanical', 'UserController.indexSelectMechanical')
+    Route.get('/users-active', 'UserController.indexActive')
     Route.get('/users/:id', 'UserController.show')
     Route.put('/users/:id', 'UserController.update').validator('User/update')
     Route.delete('/users/:id', 'UserController.destroy')
@@ -52,6 +55,8 @@ Route.group (() => {
     // Routes Equipaments
     //equipaments
     Route.get('/equipments', 'EquipmentController.index')
+    Route.get('/equipments-select-tag', 'EquipmentController.indexSelectTag')
+    Route.get('/equipments-select-tag-not-in-maintenance', 'EquipmentController.indexSelectTagNoInMaintenance')
     Route.get('/equipments/:id', 'EquipmentController.show')
     Route.post('/equipments', 'EquipmentController.store').validator('EquipmentRenting')
     Route.put('/equipments/:id', 'EquipmentController.update').validator('EquipmentRenting')
@@ -89,6 +94,44 @@ Route.group (() => {
     Route.put('/equipment-proprietary/:id', 'EquipmentProprietaryController.update').validator('EquipmentProprietary')
     Route.delete('/equipment-proprietary/:id', 'EquipmentProprietaryController.destroy')
     //equipment-proprietary
+
+    //Maintenance
+    Route.get('/maintenance-equipments', 'MaintenanceEquipmentController.getMaintenanceEquipments')
+    Route.post('/maintenance-equipments', 'MaintenanceEquipmentController.store')
+
+    //Maintenance Failure Class
+    Route.get('/maintenance-failure-class/:id', 'MaintenanceFailureClassController.show')
+    Route.get('/maintenance-failure-class-time-category', 'MaintenanceFailureClassController.showFailureClassTimeCategory')
+    //Maintenance Failure Class
+
+    //Maintenance Occorrence
+    Route.get('/maintenance-ocorrence-by-type', 'OccurrenceController.indexOcorrenceByMaintenanceType')
+    //Maintenance Occorrence
+
+    //Maintenance Equipment ControlHour
+    Route.post('/maintenance-equipment-control-hour', 'EquipmentControlHourController.storeMaintenance')
+    Route.post('/maintenance-equipment-release-control-hour', 'EquipmentControlHourController.storeMaintenanceRelease')
+    //Maintenance Equipment ControlHour
+
+     //Maintenance Item
+     Route.get('/maintenance-items', 'MaintenanceItemController.showMaintenanceItemByClasseFalhaIDByEquipamentoModeloID')
+     //Maintenance Item
+
+    //Maintenance Reason
+    Route.get('/maintenance-reason', 'MaintenanceReasonController.indexAll')
+    //Maintenance Reason
+
+    //Maintenance Order
+    Route.get('/maintenance-order', 'MaintenanceOrderController.showMaintenanceOrdersByEquipmentIDByCategoryTimeID')
+    //Maintenance Order
+
+    //Maintenance Detailing
+    Route.post('/maintenance-detailing', 'MaintenanceDetailingController.store')
+    //Maintenance Detailing
+
+    //Maintenance
+
+
 }).middleware(['auth'])
 
 Route.group(() => {
@@ -96,4 +139,8 @@ Route.group(() => {
     Route.get('/equipments', 'EquipmentController.index')
     Route.get('/equipments/initial-load', 'EquipmentController.initialLoad')
     Route.get('/equipments/file-download', 'EquipmentController.fileDownload')
+    Route.delete('/equipments/file-download', 'EquipmentController.fileDownloadDelete')
+
+    Route.get('/geo-process/coords', 'GeoProcessController.getCoords')
+    Route.get('/geo-process/position', 'GeoProcessController.getPosition')
 }).prefix('api/v1')

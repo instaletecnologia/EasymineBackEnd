@@ -47,7 +47,7 @@ class GeomReferencia extends Model {
     const hour = dateSplit[1].split('.')[0];
     const referenceDateHour = moment(`${date} ${hour}`);
     const secondsDiff = moment().diff(referenceDateHour, 'seconds');
-    return secondsDiff < 60;
+    return secondsDiff < 30;
   }
 
 }

@@ -6,7 +6,7 @@ const Schema = use('Schema')
 class UsersAddfieldsSchema extends Schema {
   up () {
     this.table('Usuarios', (table) => {
-      table.string('Senha', 60).notNullable().alter()
+      table.string('password', 60).notNullable()
       table.string('token').nullable()
       table.datetime('token_created_at').nullable()
     })
@@ -14,7 +14,7 @@ class UsersAddfieldsSchema extends Schema {
 
   down () {
     this.table('Usuarios', (table) => {
-      table.string('Senha', 50).notNullable().alter()
+      table.dropColumn('password')
       table.dropColumn('token')
       table.dropColumn('token_created_at')
     })

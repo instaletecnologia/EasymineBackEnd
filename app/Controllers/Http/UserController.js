@@ -13,6 +13,27 @@ class UserController {
     return user
   }
 
+  async indexSelectMechanical ({ request, response, view }) {
+    const users = await User.query()
+    .select('UsuarioID','Nome')
+    .where('Ativo', true)
+    .where('UsuarioPermissaoID', 15)
+    .orderBy('Nome', 'desc')
+    .fetch()
+
+    return users
+  }
+
+  async indexActive ({ request, response, view }) {
+    const users = await User.query()
+    .select('UsuarioID','Nome', 'Chapa', 'UsuarioPermissaoID')
+    .where('Ativo', true)
+    .orderBy('Nome', 'desc')
+    .fetch()
+
+    return users
+  }
+
   async store({ request, auth }){
 
     const data = request.only([
