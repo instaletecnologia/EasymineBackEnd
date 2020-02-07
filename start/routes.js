@@ -15,6 +15,7 @@
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
+const SocketIOClient = use('SocketIOClient')
 
 //Routes Users
 Route.post('/users', 'UserController.store').validator('User/store')
@@ -136,6 +137,9 @@ Route.group (() => {
 
 Route.group(() => {
     Route.get('/test', ({ response }) => response.send({ ok: true }))
+    Route.get('/test-socket', ({ response }) => {
+        console.log(SocketIOClient)
+    })
     Route.get('/equipments', 'EquipmentController.index')
     Route.get('/equipments/initial-load', 'EquipmentController.initialLoad')
     Route.get('/equipments/file-download', 'EquipmentController.fileDownload')

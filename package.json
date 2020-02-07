@@ -36,6 +36,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "mssql": "4.1.0",
+    "socket.io-client": "^2.3.0",
     "sqlite3": "^4.1.0",
     "tedious": "^2.7.1",
     "yup": "^0.27.0"
