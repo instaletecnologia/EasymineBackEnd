@@ -10,6 +10,7 @@ class OccurrenceController {
     const { maintenanceType, equipmentId } = request.all()
 
     const query = await Database
+    .distinct('dbo.OcorrenciasTipos.Descricao')
     .select('dbo.Ocorrencias.OcorrenciaID', 'dbo.OcorrenciasTipos.Descricao')
     .from('dbo.Ocorrencias')
     .innerJoin('dbo.OcorrenciasTipos', 'dbo.OcorrenciasTipos.OcorrenciaTipoID', 'dbo.Ocorrencias.OcorrenciaTipoID')

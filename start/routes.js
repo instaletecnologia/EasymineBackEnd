@@ -108,10 +108,9 @@ Route.group (() => {
     Route.get('/maintenance-ocorrence-by-type', 'OccurrenceController.indexOcorrenceByMaintenanceType')
     //Maintenance Occorrence
 
-    //Maintenance Equipment ControlHour
-    Route.post('/maintenance-equipment-control-hour', 'EquipmentControlHourController.storeMaintenance')
-    Route.post('/maintenance-equipment-release-control-hour', 'EquipmentControlHourController.storeMaintenanceRelease')
-    //Maintenance Equipment ControlHour
+    //Maintenance Release
+    Route.post('/maintenance-release', 'MaintenanceReleaseController.store')
+    //Maintenance Release
 
      //Maintenance Item
      Route.get('/maintenance-items', 'MaintenanceItemController.showMaintenanceItemByClasseFalhaIDByEquipamentoModeloID')

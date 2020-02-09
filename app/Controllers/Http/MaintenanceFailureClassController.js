@@ -26,14 +26,24 @@ class MaintenanceFailureClassController {
 
   async showFailureClassTimeCategory ({ request, response }) {
 
-    const {  EquipamentoID, idCategoriasTempo  } = request.all()
+    const {  EquipamentoID, idCategoriasTempo, ParentID  } = request.all()
+
+    let categoryTime = 0
+
+    if (ParentID === null) {
+      categoryTime = idCategoriasTempo
+    } else {
+      categoryTime = ParentID
+    }
+    console.log(ParentID);
+    console.log(idCategoriasTempo);
 
    const failureClassTimeCategory = await Database
    .select('man.ClassesFalhas.ClasseFalhaID','man.ClassesFalhas.Descricao')
    .from('man.ClassesFalhasCategoriasTempos')
    .innerJoin('man.ClassesFalhas', 'man.ClassesFalhas.ClasseFalhaID', 'man.ClassesFalhasCategoriasTempos.ClasseFalhaID')
    .where({ 'man.ClassesFalhas.Ativo': true })
-   .where({'man.ClassesFalhasCategoriasTempos.CategoriaTempoID': idCategoriasTempo})
+   .where({'man.ClassesFalhasCategoriasTempos.CategoriaTempoID': categoryTime})
 
    return failureClassTimeCategory
   }
