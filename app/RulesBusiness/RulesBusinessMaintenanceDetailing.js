@@ -1,49 +1,45 @@
 const Model = use("Model");
-const moment = require("moment");
-const Formats = use('Antl/Formats')
+const MaintenanceDetailing = use('App/Models/MaintenanceDetailing')
 
 const Defaults = use('App/Defaults/Dates')
-const NewcurrentDate = Defaults.currentDate()
+const NewcurrentDate = Defaults.currentDate();
 
 const Database = use('Database')
-const MaintenanceDetailing = use('App/Models/MaintenanceDetailing')
 
 class RulesBusinessMaintenanceDetailing {
 
-// função para inserir uma nova liberação de equipamento para operacao
-static async MaintenanceDetailingInsert(
-  maintenanceItemID,
-  mechanicallID,
-  date,
-  note,
-  equipmentID,
-  controlHourID,
-  operationID,
-  ocorrenceID,
-  userID,
-  date,
-  maintenanceOrderID,
-  maintenanceReasonID
+  static async MaintenanceDetailingInsert(
+    ManutencaoItenID,
+    UsuarioMecanicoID,
+    DataHora,
+    Observacao,
+    EquipamentoID,
+    ControleHoraID,
+    OperacaoID,
+    OcorrenciaID,
+    UsuarioRegistroID,
+    DataRegistro,
+    OrdemManutencaoID,
+    MotivoManutencaoID,
   ) {
 
-  const maintenanceDetailing = await MaintenanceDetailing.create({
+    const manutencaoDetalheID = await MaintenanceDetailing.create({
+      'ControleHoraID': ControleHoraID,
+      'DataHora': DataHora,
+      'DataRegistro': DataRegistro,
+      'EquipamentoID': EquipamentoID,
+      'ManutencaoItenID': ManutencaoItenID,
+      'MecanicoID': UsuarioMecanicoID,
+      'MotivoManutencaoID': MotivoManutencaoID,
+      'Observacao': Observacao,
+      'OcorrenciaID': OcorrenciaID,
+     // 'OperacaoID': OperacaoID,
+      'OrdemManutencaoID': OrdemManutencaoID,
+      'UsuarioRegistroID': UsuarioRegistroID
+    })
 
-      'ManutencaoItenID': maintenanceItemID
-      ,'MecanicoID': mechanicallID
-      ,'DataHora': date
-      ,'Observacao': note
-      ,'EquipamentoID': equipmentID
-      ,'ControleHoraID': controlHourID
-      ,'OperacaoID': operationID
-      ,'OcorrenciaID': ocorrenceID
-      ,'UsuarioRegistroID': userID
-      ,'DataRegistro' : date
-      ,'OrdemManutencaoID': maintenanceOrderID
-      ,'MotivoManutencaoID': maintenanceReasonID
-  })
-
-     return maintenanceDetailing
-}
+   return manutencaoDetalheID
+  }
 
 }
 

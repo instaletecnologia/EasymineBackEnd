@@ -1,43 +1,47 @@
 'use strict'
 
-const Database = use('Database')
-const Defaults = use('App/Defaults/Dates')
-const NewcurrentDate = Defaults.currentDate()
-
-const MaintenanceDetailing = use('App/Models/MaintenanceDetailing')
 const RulesBusinessMaintenanceDetailing = use('App/RulesBusiness/RulesBusinessMaintenanceDetailing')
+const RulesBusinessEquipmentOperation = use('App/RulesBusiness/RulesBusinessEquipmentOperation')
+
+const Defaults = use('App/Defaults/Dates')
+
 
 class MaintenanceDetailingController {
 
-  async store ({ request, auth }) {
+  async store ({ request, auth, response }) {
 
-    const {
-       EquipamentoID,
-       UsuarioID,
-       ManutencaoItenID,
-       UsuarioMecanicoID,
-       MotivoManutencaoID,
-       OrdemManutencaoID,
-       Observacao,
-       ControleHoraID,
-       OperacaoID,
-       OcorrenciaID,
-    } = request.all()
+  const { EquipamentoID, DataHora, UsuarioID, ManutencaoItenID, UsuarioMecanicoID, MotivoManutencaoID, OrdemManutencaoID, Observacao, ControleHoraID, OcorrenciaID } = request.all()
+  console.log(Defaults.formatDates(DataHora));
+  return DataHora
+  const operation = await RulesBusinessEquipmentOperation.OperationGetLast(EquipamentoID)
 
-    return await RulesBusinessMaintenanceDetailing.MaintenanceDetailingInsert(
-      ManutencaoItenID,
-      UsuarioMecanicoID,
-      NewcurrentDate,
-      Observacao,
-      EquipamentoID,
-      ControleHoraID,
-      OperacaoID,
-      OcorrenciaID,
-      UsuarioID,
-      NewcurrentDate,
-      OrdemManutencaoID,
-      MotivoManutencaoID
-    )
+  let orderMaintenanceID = null
+  if (OrdemManutencaoID != null) {
+    orderMaintenanceID = OrdemManutencaoID
+  }
+
+   if (operation.length === 0) {
+      return response.status(404).json({ message: "maintenance.error.add.NoCreateNewOperation" })
+    }
+    const OperationID = operation[0].OperacaoID;
+    const NewcurrentDate = Defaults.currentDate();
+
+    const maintenanceDetailing = await RulesBusinessMaintenanceDetailing.MaintenanceDetailingInsert(
+        ManutencaoItenID,
+        UsuarioMecanicoID,
+        DataHora,
+        Observacao,
+        EquipamentoID,
+        ControleHoraID.toString(),
+        OperationID.toString(),
+        OcorrenciaID,
+        UsuarioID,
+        NewcurrentDate,
+        orderMaintenanceID,
+        MotivoManutencaoID
+      )
+
+    return maintenanceDetailing
 
   }
 

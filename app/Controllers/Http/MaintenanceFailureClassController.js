@@ -28,22 +28,34 @@ class MaintenanceFailureClassController {
 
     const {  EquipamentoID, idCategoriasTempo, ParentID  } = request.all()
 
-    let categoryTime = 0
+    let categoryTimeID = 0
 
-    if (ParentID === null) {
-      categoryTime = idCategoriasTempo
+    if (ParentID == 3) {
+      categoryTimeID = idCategoriasTempo;
     } else {
-      categoryTime = ParentID
+      categoryTimeID = ParentID;
     }
-    console.log(ParentID);
-    console.log(idCategoriasTempo);
 
    const failureClassTimeCategory = await Database
-   .select('man.ClassesFalhas.ClasseFalhaID','man.ClassesFalhas.Descricao')
-   .from('man.ClassesFalhasCategoriasTempos')
-   .innerJoin('man.ClassesFalhas', 'man.ClassesFalhas.ClasseFalhaID', 'man.ClassesFalhasCategoriasTempos.ClasseFalhaID')
+   .select('man.ClassesFalhas.ClasseFalhaID', 'man.ClassesFalhas.Descricao')
+   .from('man.ClassesFalhas')
+   .innerJoin('man.ClassesFalhasCategoriasTempos', 'man.ClassesFalhasCategoriasTempos.ClasseFalhaID' ,'man.ClassesFalhas.ClasseFalhaID')
+   .innerJoin('man.ManutencaoItens', 'man.ClassesFalhas.ClasseFalhaID', 'man.ManutencaoItens.ClasseFalhaID')
+   .innerJoin('man.ManutencaoItensEquipamentosModelos', 'man.ManutencaoItensEquipamentosModelos.ManutencaoItenID', 'man.ManutencaoItens.ManutencaoItenID')
+   .innerJoin('dbo.Equipamentos', 'dbo.Equipamentos.EquipamentoModeloID', 'man.ManutencaoItensEquipamentosModelos.EquipamentoModeloID')
    .where({ 'man.ClassesFalhas.Ativo': true })
-   .where({'man.ClassesFalhasCategoriasTempos.CategoriaTempoID': categoryTime})
+   .where({'man.ClassesFalhasCategoriasTempos.CategoriaTempoID': categoryTimeID})
+   .where({ 'dbo.Equipamentos.EquipamentoID': EquipamentoID })
+
+   //SELECT *
+   //FROM man.ClassesFalhas AS CF
+   //INNER JOIN man.ClassesFalhasCategoriasTempos AS CFC ON CFC.ClasseFalhaID = CF.ClasseFalhaID
+   //INNER JOIN man.ManutencaoItens AS MI ON CF.ClasseFalhaID = MI.ClasseFalhaID
+   //INNER JOIN man.[ManutencaoItensEquipamentosModelos] AS MIEM ON MIEM.ManutencaoItenID = MI.ManutencaoItenID
+   //INNER JOIN dbo.Equipamentos AS E ON E.EquipamentoModeloID = MIEM.EquipamentoModeloID
+   //WHERE CF.Ativo = 1
+   //AND E.EquipamentoID = 1
+   //AND CFC.CategoriaTempoID = 6
 
    return failureClassTimeCategory
   }

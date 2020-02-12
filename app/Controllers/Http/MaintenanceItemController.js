@@ -24,6 +24,7 @@ class MaintenanceItemController {
 
   async showMaintenanceItemByClasseFalhaIDByEquipamentoModeloID ({ request, response }) {
     const { ClasseFalhaID, EquipamentoModeloID } = request.all()
+  console.log(ClasseFalhaID,EquipamentoModeloID);
 
    if (!ClasseFalhaID) {
      return response
