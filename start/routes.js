@@ -15,7 +15,6 @@
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
-const SocketIOClient = use('SocketIOClient')
 
 //Routes Users
 Route.post('/users', 'UserController.store').validator('User/store')

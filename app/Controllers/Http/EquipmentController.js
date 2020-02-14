@@ -151,6 +151,7 @@ class EquipmentController {
     const operationQuery = await Database.raw(
       `
       SELECT
+        TOP (1)
         op.OperacaoID,
         op.FrenteID,
         f.Descricao as FrenteDescricao,
@@ -165,6 +166,7 @@ class EquipmentController {
       WHERE
         op.equipamentoid = ${EquipamentoID}
         AND op.datafim IS NULL
+      ORDER BY op.DataInicio DESC
       `
     )
 
