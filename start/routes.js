@@ -108,9 +108,10 @@ Route.group (() => {
     Route.get('/maintenance-ocorrence-by-type', 'OccurrenceController.indexOcorrenceByMaintenanceType')
     //Maintenance Occorrence
 
-    //Maintenance Release
-    Route.post('/maintenance-release', 'MaintenanceReleaseController.store')
-    //Maintenance Release
+    //Maintenance Equipment ControlHour
+    Route.post('/maintenance-equipment-control-hour', 'EquipmentControlHourController.storeMaintenance')
+    Route.post('/maintenance-equipment-release-control-hour', 'EquipmentControlHourController.storeMaintenanceRelease')
+    //Maintenance Equipment ControlHour
 
      //Maintenance Item
      Route.get('/maintenance-items', 'MaintenanceItemController.showMaintenanceItemByClasseFalhaIDByEquipamentoModeloID')
@@ -135,6 +136,9 @@ Route.group (() => {
 
 Route.group(() => {
     Route.get('/test', ({ response }) => response.send({ ok: true }))
+    Route.get('/test-socket', ({ response }) => {
+        console.log(SocketIOClient)
+    })
     Route.get('/equipments', 'EquipmentController.index')
     Route.get('/equipments/initial-load', 'EquipmentController.initialLoad')
     Route.get('/equipments/file-download', 'EquipmentController.fileDownload')

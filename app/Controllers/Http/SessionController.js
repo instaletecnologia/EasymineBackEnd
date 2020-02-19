@@ -9,7 +9,7 @@ const User = use("App/Models/Usuarios")
 class SessionController {
 
   async currentUser ({ auth }) {
-
+  try {
     const user = auth.user.toJSON()
     const permissions = await Database.raw(
       `
@@ -52,6 +52,10 @@ class SessionController {
 
     return { ...user, Areas, Modulos, Diretorios, Funcionalidades }
 
+    } catch (error) {
+      return response.status(404).json({ message: "app.login.message-invalid-credentials" })
+    }
+
   }
 
   async revokeToken ({ auth }) {
@@ -66,20 +70,24 @@ class SessionController {
     const passwordCrypto = await crypto.MD5(password).toString().toLocaleUpperCase()
     const loginUperCase = Login.toLocaleUpperCase()
 
-    const userfind = await Database
+      const userfind = await Database
         .select('UsuarioID')
         .from('dbo.Usuarios')
         .where({'Login': loginUperCase})
         .where({'Senha': passwordCrypto})
 
-    console.log(userfind)
-    const user = await User.find(userfind[0].UsuarioID)
 
-    console.log(await auth.generate(user))
+    if (_.isEmpty(userfind)) {
+      return response.status(404).json({ message: "app.login.message-invalid-credentials" })
+    }
+
+    const userID = _.get(_.first(userfind), 'UsuarioID')
+    const user = await User.findOrFail(userID)
     // const token = await auth.attempt(Login, password)
     const token = await auth.generate(user)
 
     return token
+
   }
 
 }

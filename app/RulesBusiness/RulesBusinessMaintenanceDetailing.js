@@ -1,10 +1,7 @@
 const Model = use("Model");
-const MaintenanceDetailing = use('App/Models/MaintenanceDetailing')
-
-const Defaults = use('App/Defaults/Dates')
-const NewcurrentDate = Defaults.currentDate();
-
 const Database = use('Database')
+
+const MaintenanceDetailing = use('App/Models/MaintenanceDetailing')
 
 class RulesBusinessMaintenanceDetailing {
 
@@ -23,22 +20,24 @@ class RulesBusinessMaintenanceDetailing {
     MotivoManutencaoID,
   ) {
 
-    const manutencaoDetalheID = await MaintenanceDetailing.create({
-      'ControleHoraID': ControleHoraID,
-      'DataHora': DataHora,
-      'DataRegistro': DataRegistro,
-      'EquipamentoID': EquipamentoID,
-      'ManutencaoItenID': ManutencaoItenID,
-      'MecanicoID': UsuarioMecanicoID,
-      'MotivoManutencaoID': MotivoManutencaoID,
-      'Observacao': Observacao,
-      'OcorrenciaID': OcorrenciaID,
-     // 'OperacaoID': OperacaoID,
-      'OrdemManutencaoID': OrdemManutencaoID,
-      'UsuarioRegistroID': UsuarioRegistroID
-    })
+    const manutencaoDetalheID = await Database
+    .insert({
+      ControleHoraID: ControleHoraID.toString(),
+      DataHora: DataHora,
+      DataRegistro: DataRegistro,
+      EquipamentoID: EquipamentoID,
+      ManutencaoItenID: ManutencaoItenID,
+      MecanicoID: UsuarioMecanicoID,
+      MotivoManutencaoID: MotivoManutencaoID,
+      Observacao: Observacao.toString(),
+      OcorrenciaID: OcorrenciaID,
+      //'OperacaoID': OperacaoID,
+      OrdemManutencaoID: OrdemManutencaoID,
+      UsuarioRegistroID: UsuarioRegistroID
+      })
+    .into('man.ManutencaoDetalhes')
 
-   return manutencaoDetalheID
+
   }
 
 }

@@ -1,28 +1,30 @@
 'use strict'
-const MaintenanceEquipment = use('App/Models/MaintenanceEquipment')
-const EquipmentControlHour = use('App/Models/EquipmentControlHour')
-
 const Database = use('Database')
-const _ = use('lodash')
+
+const _ = require("lodash");
+
 const Defaults = use('App/Defaults/Dates')
-const NewcurrentDate = Defaults.currentDate()
 const IdGenerator = use('App/Defaults/IdGenerator')
 
 const RulesBusinessOccurrence = use('App/RulesBusiness/RulesBusinessOccurrence')
 const RulesBusinessEquipmentOperation = use('App/RulesBusiness/RulesBusinessEquipmentOperation')
-const RulesBusinessMaintenanceRelease = use('App/RulesBusiness/RulesBusinessMaintenanceRelease')
+const RulesBusinessEquipmentControlHour = use('App/RulesBusiness/RulesBusinessEquipmentControlHour')
+const RulesBusinessMaintenanceEquipment = use('App/RulesBusiness/RulesBusinessMaintenanceEquipment')
+const RulesBusinessMessage = use('App/RulesBusiness/RulesBusinessMessage')
 
 class MaintenanceEquipmentController {
 
   async getMaintenanceEquipments(){
-    let equipments = (await Database.raw(` exec [man].[spQDataControleHorasCategoriaTempoFilhasHMAcontecendo] null, null `)).map(row => row)
+    let equipments =
+    (await Database.raw(` exec [man].[spQDataControleHorasCategoriaTempoFilhasHMAcontecendo] null, null `))
+    .map(row => row)
 
     return  equipments;
   }
 
 // Adiciona equipamento em manutenção
   async store ({ request, response, auth }) {
-
+    const NewcurrentDate =  await Defaults.currentDate()
     const { EquipamentoID, OcorrenciaID, Horimetro, UsuarioID, Observacao } = request.all()
 
     const horimetro = Horimetro.replace('.', '').replace('.', '').replace('.', '').replace('.', '').replace(',', '.')
@@ -30,7 +32,7 @@ class MaintenanceEquipmentController {
     let note = ""
     if (Observacao != null) {
       note = Observacao
-    }
+     }
 
     //caso o parametro UsuarioID não tenha vamos vamos setar o com ADMIN
     const usuarioID =  UsuarioID
@@ -39,72 +41,65 @@ class MaintenanceEquipmentController {
      }
 
     //buscamos os dados da ocorrencia
-    const ocorrence = await RulesBusinessOccurrence.OccurrenceByID(OcorrenciaID)
-    if (ocorrence.length === 0) {
+    let ocorrence = null
+    ocorrence = await RulesBusinessOccurrence.OccurrenceByID(OcorrenciaID)
+    if (_.isEmpty(ocorrence)) {
       return response.status(404).json({ message: "maintenance.error.release.WithoutOccurrence" })
+      }
+
+
+    let Operation = null
+
+      // Vmaos pegar a ultima operacao do equipamento
+     Operation = await RulesBusinessEquipmentOperation.OperationGetLast(EquipamentoID)
+
+    // Se não existir uma operação vamos emitir uma mensagem de erro
+    if (_.isEmpty(Operation)) {
+      return response.status(404).json({ message: "maintenance.error.not.allocated.activity" })
     }
 
-     //buscamos os dados de operacao
-    // const equipmentOperation = await RulesBusinessEquipmentOperation.OperationGetLast(EquipamentoID)
-    //return equipmentOperation
+    let operationId = _.get(_.first(Operation), 'OperacaoID')
+    const operationLastID = _.get(_.first(Operation), 'OperacaoID')
+    let frontID = _.get(_.first(Operation), 'FrenteID')
 
-    //if (equipmentOperation.length === 0) {
-    //  return response.status(404).json({ message: "maintenance.error.release.NoOperation" })
-    // }
 
-   // return equipmentOperation.length
-    let FrenteID = 0
-    let OperacaoID = 0
+    //Se o equipamento estiver com atividade e a ocorrencia estiver configurada para n permnanecer na atividade vamos inserir uma nova
+    //Operacao com frenteID = 0
+    if (frontID !== 0) {
+      const stayActivity = _.get(_.first(ocorrence), 'PermanecerNaAtividade')
 
-    // FrenteID = equipmentOperation[0].FrenteID
-    // OperacaoID = equipmentOperation[0].OperacaoID
+       if ( stayActivity === false ) {
+            frontID = 0
+            operationId = IdGenerator.operation(EquipamentoID)
 
-   //Se a ocorrencia estiver pra não permanecer na atividade vamos criar uma nova operacao sem atividade
-   //if (ocorrence[0].PermanecerNaAtividade === false || ocorrence[0].PermanecerNaAtividade === null ) {
+            // Vmaos inserir uma nova operação
+            try {
+               await RulesBusinessEquipmentOperation.OperationInsert(operationId, EquipamentoID,
+                NewcurrentDate, frontID, usuarioID, note, horimetro, "M", operationLastID)
+            } catch (error) {
+              return response.status(404).json({ message: "maintenance.error.add.NoCreateNewOperation" })
+            }
+        }
 
-   //  FrenteID = 0
-   //  //Vamos atualizar a ultima operacao e fechar a data fim o horimetro final
-    const lastEquipmentOperation = await RulesBusinessEquipmentOperation.OperationUpdate(EquipamentoID, NewcurrentDate, usuarioID, horimetro)
-    const newEquipmentOperation = await RulesBusinessEquipmentOperation.OperationInsert(EquipamentoID, FrenteID, usuarioID, note, horimetro, "M")
-   if (newEquipmentOperation.length === 0) {
-      return response.status(404).json({ message: "maintenance.error.add.NoCreateNewOperation" })
     }
-    OperacaoID = newEquipmentOperation.OperacaoID
-   //}ado
 
-   //criamos o controlehoraID
+    //criamos o controlehoraID
     let id = IdGenerator.controlHour(EquipamentoID)
-   // criamos o novo registro na tabela controlehoras
-   const equipmentControlHour = await EquipmentControlHour.create({
-     'ControleHoraID': id
-     ,'EquipamentoID': EquipamentoID
-     ,'OcorrenciaID': OcorrenciaID
-     ,'OperacaoID': OperacaoID
-     ,'DataHoraInicio': NewcurrentDate
-     ,'Latitude': 0
-     ,'Longitude': 0
-     ,'Altitude': 0
-     ,'DMT': 0
-     ,'KmAtual': 0
-     ,'Peso': 0
-     ,'DentroDaCerca': 0
-     ,'SensorID': 0
-     ,'Valor': 'M'
-     ,'ValorTipo': '#MANUTENCAO'
-     ,'Horímetro': horimetro
-     ,'Ok': 0
-     ,'Cheio': 0
-     ,'OcorrenciaTipoID': ocorrence[0].OcorrenciaTipoID
-     ,'DataCadastro': NewcurrentDate
-     ,'JustificativaID': 1
-     ,'Obs': note
-     ,'Logado': 0
-     ,'FrenteID': FrenteID
-     ,'HorimetroTelemetria': horimetro
-     ,'CreationDate': NewcurrentDate
-     ,'OperadorID': usuarioID
-   });
-    return equipmentControlHour
+
+    // Vamos inserir uma novo registro em Manutencao
+    await RulesBusinessMaintenanceEquipment.MaintenanceEquipmentInsert(EquipamentoID, NewcurrentDate, id, operationId, note, NewcurrentDate, usuarioID)
+
+    const ocorrenceTypeID = _.get(_.first(ocorrence), 'OcorrenciaTipoID')
+    // criamos o novo registro na tabela controlehoras
+    const controlTimeID = await RulesBusinessEquipmentControlHour.EquipmentControlHourInsert(
+     id,EquipamentoID,OcorrenciaID, operationId, NewcurrentDate, null, 0, 0, 0, 0, 0, 0, 0, 0,'M',
+     '#MANUTENCAO', 0, 0, ocorrenceTypeID, note, 0, frontID, horimetro, usuarioID)
+
+    // vamos inserir uma mensagem do tipo ocorrencia para que o embarcado receba a alteração de ocorrencia
+    await RulesBusinessMessage.MessageInsert(EquipamentoID, "Equipamento em Manutenção", NewcurrentDate, usuarioID, 5,
+      frontID, null, null, 1, OcorrenciaID, id)
+
+    return id
   }
 
 }

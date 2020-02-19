@@ -13,12 +13,10 @@ class MaintenanceReasonController {
   }
 
   async indexAll ({ request, response, view }) {
-console.log('entrei')
     const maintenanceReason = await Database
    .select('man.MotivosManutencao.MotivoManutencaoID','man.MotivosManutencao.Descricao')
    .from('man.MotivosManutencao')
    //.where({ 'man.MotivosManutencao.Ativo': true })
-   console.log('sai')
     return maintenanceReason
   }
 
