@@ -93,7 +93,6 @@ class SessionController {
 
     return token
     } catch (error) {
-
       return response.status(404).json({ message: "app.login.message-invalid-credentials" })
     }
   }
