@@ -47,7 +47,7 @@ class MaintenanceFailureClassController {
    .where({'man.ClassesFalhasCategoriasTempos.CategoriaTempoID': categoryTimeID})
    .where({ 'dbo.Equipamentos.EquipamentoID': EquipamentoID })
    .groupByRaw('man.ClassesFalhas.ClasseFalhaID, man.ClassesFalhas.Descricao')
-   .orderBy('man.ClassesFalhas.Descricao','desc')
+   .orderBy('man.ClassesFalhas.Descricao')
 
    return failureClassTimeCategory
   }
