@@ -35,6 +35,7 @@ class RulesBusinessOccurrence {
     .where({'dbo.CategoriasTempo.idCategoriasTempo': maintenanceType})
     .orWhere({'dbo.CategoriasTempo.ParentID': maintenanceType})
     .groupByRaw('dbo.Ocorrencias.OcorrenciaID, dbo.OcorrenciasTipos.Descricao')
+    .orderBy('dbo.OcorrenciasTipos.Descricao')
     return query
   }
 
