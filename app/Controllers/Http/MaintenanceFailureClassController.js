@@ -26,14 +26,28 @@ class MaintenanceFailureClassController {
 
   async showFailureClassTimeCategory ({ request, response }) {
 
-    const {  EquipamentoID, idCategoriasTempo  } = request.all()
+    const {  EquipamentoID, idCategoriasTempo, ParentID  } = request.all()
+
+    let categoryTimeID = 0
+
+    if (ParentID == 3) {
+      categoryTimeID = idCategoriasTempo;
+    } else {
+      categoryTimeID = ParentID;
+    }
 
    const failureClassTimeCategory = await Database
-   .select('man.ClassesFalhas.ClasseFalhaID','man.ClassesFalhas.Descricao')
-   .from('man.ClassesFalhasCategoriasTempos')
-   .innerJoin('man.ClassesFalhas', 'man.ClassesFalhas.ClasseFalhaID', 'man.ClassesFalhasCategoriasTempos.ClasseFalhaID')
+   .select('man.ClassesFalhas.ClasseFalhaID', 'man.ClassesFalhas.Descricao')
+   .from('man.ClassesFalhas')
+   .innerJoin('man.ClassesFalhasCategoriasTempos', 'man.ClassesFalhasCategoriasTempos.ClasseFalhaID' ,'man.ClassesFalhas.ClasseFalhaID')
+   .innerJoin('man.ManutencaoItens', 'man.ClassesFalhas.ClasseFalhaID', 'man.ManutencaoItens.ClasseFalhaID')
+   .innerJoin('man.ManutencaoItensEquipamentosModelos', 'man.ManutencaoItensEquipamentosModelos.ManutencaoItenID', 'man.ManutencaoItens.ManutencaoItenID')
+   .innerJoin('dbo.Equipamentos', 'dbo.Equipamentos.EquipamentoModeloID', 'man.ManutencaoItensEquipamentosModelos.EquipamentoModeloID')
    .where({ 'man.ClassesFalhas.Ativo': true })
-   .where({'man.ClassesFalhasCategoriasTempos.CategoriaTempoID': idCategoriasTempo})
+   .where({'man.ClassesFalhasCategoriasTempos.CategoriaTempoID': categoryTimeID})
+   .where({ 'dbo.Equipamentos.EquipamentoID': EquipamentoID })
+   .groupByRaw('man.ClassesFalhas.ClasseFalhaID, man.ClassesFalhas.Descricao')
+   .orderBy('man.ClassesFalhas.Descricao')
 
    return failureClassTimeCategory
   }

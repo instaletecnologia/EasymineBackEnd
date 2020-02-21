@@ -1,10 +1,5 @@
 const Model = use("Model");
-const moment = require("moment");
-const Formats = use('Antl/Formats')
 
-const Defaults = use('App/Defaults/Dates')
-const NewcurrentDate = Defaults.currentDate()
-const EquipmentOperation = use('App/Models/EquipmentOperation')
 const Database = use('Database')
 
 class RulesBusinessOccurrence {
@@ -12,7 +7,7 @@ class RulesBusinessOccurrence {
   // retorna a ocorrencia de acordo com a ocorrenciaID
   static async OccurrenceByID(ocorrenceID) {
     const ocorrence = await Database
-      .select('dbo.Ocorrencias.OcorrenciaID','dbo.Ocorrencias.OcorrenciaTipoID')
+      .select('dbo.Ocorrencias.OcorrenciaID','dbo.Ocorrencias.OcorrenciaTipoID', 'dbo.Ocorrencias.PermanecerNaAtividade')
       .from('dbo.Ocorrencias')
       .where({'dbo.Ocorrencias.OcorrenciaID': ocorrenceID})
     return  ocorrence
@@ -28,12 +23,21 @@ class RulesBusinessOccurrence {
     return  ocorrence
   }
 
-// SELECT
-// O.OcorrenciaID, O.OcorrenciaTipoID
-// FROM dbo.Ocorrencias AS O
-// INNER JOIN dbo.Equipamentos AS E ON E.EquipamentoTipoID = O.EquipamentoTipoID
-// WHERE O.OcorrenciaTipoID = -12
-// AND E.EquipamentoID = 1
+  static async OcorrenceByMaintenanceType(maintenanceType, equipmentId) {
+    const query = await Database
+    .select('dbo.Ocorrencias.OcorrenciaID', 'dbo.OcorrenciasTipos.Descricao')
+    .from('dbo.OcorrenciasTipos')
+    .innerJoin('dbo.Ocorrencias', 'dbo.OcorrenciasTipos.OcorrenciaTipoID', 'dbo.Ocorrencias.OcorrenciaTipoID')
+    .innerJoin('dbo.Equipamentos', 'dbo.Equipamentos.EquipamentoTipoID', 'dbo.Ocorrencias.EquipamentoTipoID')
+    .innerJoin('dbo.CategoriasTempo', 'dbo.CategoriasTempo.idCategoriasTempo', 'dbo.Ocorrencias.idCategoriasTempo')
+    .where({ 'dbo.Ocorrencias.Ativo': true })
+    .where({'dbo.Equipamentos.EquipamentoID': equipmentId})
+    .where({'dbo.CategoriasTempo.idCategoriasTempo': maintenanceType})
+    .orWhere({'dbo.CategoriasTempo.ParentID': maintenanceType})
+    .groupByRaw('dbo.Ocorrencias.OcorrenciaID, dbo.OcorrenciasTipos.Descricao')
+    .orderBy('dbo.OcorrenciasTipos.Descricao')
+    return query
+  }
 
 }
 

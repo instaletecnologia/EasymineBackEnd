@@ -17,10 +17,29 @@ class EquipmentOperationController {
   }
 
   async store({ request, auth }){
-    const data = request.only([
-      'description',
-    ])
-    return RulesBusinessEquipmentOperation.OperationInsert(data)
+    const {
+    OperacaoID,
+    FrenteID,
+    EquipamentoID,
+    DataCadastro,
+    HorimetroInicial,
+    KmInicial,
+    DMT,
+    DataInicio,
+    Obs,
+     } = request.all()
+
+   const operationID = await RulesBusinessEquipmentOperation.OperationInsert(
+   OperacaoID,
+   EquipamentoID,
+   FrenteID,
+   auth.user.UsuarioID,
+   Obs,
+   HorimetroInicial,
+   0
+   )
+
+   return OperacaoID
 
   }
 

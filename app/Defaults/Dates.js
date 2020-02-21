@@ -1,5 +1,7 @@
 const Model = use("Model");
 const moment = require("moment");
+const _ = use('lodash');
+const Database = use('Database')
 
 class Dates extends Model {
 
@@ -12,19 +14,18 @@ if (field == "end_date") return value ? value.format("DD/MM/YYYY") : value;
 else return value ? value.format("DD/MM/YYYY hh:mm a") : value;
 }
 
-static formatDates(field, value) {
-if (field == "end_date")
-  // format only certain fields
-  return moment(value, "DD/MM/YYYY").format("YYYY-MM-DD");
-
-return super.formatDates(field, value);
+static formatDates( value) {
+  const dateReplace = value.replace('"', '').replace('"','')
+  return moment.utc(dateReplace).format('YYYYMMDD HH:mm:ss.SSS')
 }
 
-static currentDate() {
+static async currentDate() {
 
- // const formattedDare = format('YYYY-MM-DD')
-
-  return moment(Date.now()).format('YYYYMMDD HH:mm:ss.SSS')
+  // função pega a data do servidor para realizar operacoes com datas.
+  const dateServer = await Database.raw(` SELECT GETDATE() as Date`)
+  const date = _.get(_.first(dateServer), 'Date')
+  const result =  moment.utc(date, "pt")
+  return moment(result).format('YYYYMMDD HH:mm:ss.SSS')
 }
 
 }

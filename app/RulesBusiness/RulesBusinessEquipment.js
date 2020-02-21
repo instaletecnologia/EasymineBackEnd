@@ -60,6 +60,7 @@ class RulesBusinessEquipment {
         return operation
   }
 
+  // função retorna todos os equipamentos que estão ativos e possuem alocação.
   static async EquipmentGetAcitive() {
 
     const equipments = await Database
@@ -68,19 +69,22 @@ class RulesBusinessEquipment {
         'dbo.Equipamentos.TagPrefixo',
         'dbo.Equipamentos.TagNumero',
         'dbo.Equipamentos.Ativo')
-        .from('dbo.Equipamentos')
+        .from('dbo.Operacoes')
+        .innerJoin('dbo.Equipamentos', 'dbo.Equipamentos.EquipamentoID', 'dbo.Equipamentos.EquipamentoID')
+        .where({'dbo.Operacoes.DataFim': null})
         .where({'dbo.Equipamentos.Ativo': true})
-        .orderBy('TagPrefixo', 'TagNumero', 'desc')
+        .orderBy('dbo.Equipamentos.TagPrefixo', 'dbo.Equipamentos.TagNumero', 'desc')
+        .groupByRaw('dbo.Equipamentos.EquipamentoID , dbo.Equipamentos.EquipamentoTipoID , dbo.Equipamentos.TagPrefixo, dbo.Equipamentos.TagNumero, dbo.Equipamentos.Ativo')
 
    return equipments
   }
 
+  // função retorna todos os equipamentos que nao estão em manutenção que estão ativos e possuem alocação
   static async EquipmentGetAcitiveNoInMaintenance() {
     const subquery = Database
-    .select('EquipamentoID')
-    .from('man.EquipamentosManutencoes')
-    .where({'DataLiberacao': null})
-
+      .select('EquipamentoID')
+      .from('man.EquipamentosManutencoes')
+      .where({'DataLiberacao': null})
 
     const equipments = await Database
         .select('dbo.Equipamentos.EquipamentoID',
@@ -88,10 +92,14 @@ class RulesBusinessEquipment {
         'dbo.Equipamentos.TagPrefixo',
         'dbo.Equipamentos.TagNumero',
         'dbo.Equipamentos.Ativo')
-        .from('dbo.Equipamentos')
-        .whereNotIn('dbo.Equipamentos.EquipamentoID', subquery)
+        .from('dbo.Operacoes')
+        .innerJoin('dbo.Equipamentos', 'dbo.Equipamentos.EquipamentoID', 'dbo.Equipamentos.EquipamentoID')
+        .where({'dbo.Operacoes.DataFim': null})
         .where({'dbo.Equipamentos.Ativo': true})
-        .orderBy('TagPrefixo', 'TagNumero', 'desc')
+        .whereNotIn('dbo.Equipamentos.EquipamentoID', subquery)
+        .orderBy('dbo.Equipamentos.TagPrefixo', 'dbo.Equipamentos.TagNumero', 'desc')
+        .groupByRaw('dbo.Equipamentos.EquipamentoID , dbo.Equipamentos.EquipamentoTipoID , dbo.Equipamentos.TagPrefixo, dbo.Equipamentos.TagNumero, dbo.Equipamentos.Ativo')
+
 
    return equipments
   }

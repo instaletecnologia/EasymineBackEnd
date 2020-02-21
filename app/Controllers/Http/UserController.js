@@ -18,7 +18,7 @@ class UserController {
     .select('UsuarioID','Nome')
     .where('Ativo', true)
     .where('UsuarioPermissaoID', 15)
-    .orderBy('Nome', 'desc')
+    .orderBy('Nome')
     .fetch()
 
     return users
@@ -28,7 +28,7 @@ class UserController {
     const users = await User.query()
     .select('UsuarioID','Nome', 'Chapa', 'UsuarioPermissaoID')
     .where('Ativo', true)
-    .orderBy('Nome', 'desc')
+    .orderBy('Nome')
     .fetch()
 
     return users
