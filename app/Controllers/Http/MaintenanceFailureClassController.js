@@ -46,16 +46,8 @@ class MaintenanceFailureClassController {
    .where({ 'man.ClassesFalhas.Ativo': true })
    .where({'man.ClassesFalhasCategoriasTempos.CategoriaTempoID': categoryTimeID})
    .where({ 'dbo.Equipamentos.EquipamentoID': EquipamentoID })
-
-   //SELECT *
-   //FROM man.ClassesFalhas AS CF
-   //INNER JOIN man.ClassesFalhasCategoriasTempos AS CFC ON CFC.ClasseFalhaID = CF.ClasseFalhaID
-   //INNER JOIN man.ManutencaoItens AS MI ON CF.ClasseFalhaID = MI.ClasseFalhaID
-   //INNER JOIN man.[ManutencaoItensEquipamentosModelos] AS MIEM ON MIEM.ManutencaoItenID = MI.ManutencaoItenID
-   //INNER JOIN dbo.Equipamentos AS E ON E.EquipamentoModeloID = MIEM.EquipamentoModeloID
-   //WHERE CF.Ativo = 1
-   //AND E.EquipamentoID = 1
-   //AND CFC.CategoriaTempoID = 6
+   .groupByRaw('man.ClassesFalhas.ClasseFalhaID, man.ClassesFalhas.Descricao')
+   .orderBy('man.ClassesFalhas.Descricao','desc')
 
    return failureClassTimeCategory
   }
