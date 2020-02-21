@@ -8,8 +8,11 @@ const User = use("App/Models/Usuarios")
 
 class SessionController {
 
-  async currentUser ({ auth }) {
-  try {
+  async currentUser ({ response, auth }) {
+    try {
+    if (_.isEmpty(auth)) {
+      return response.status(404).json({ message: "app.login.message-invalid-credentials" })
+    }
     const user = auth.user.toJSON()
     const permissions = await Database.raw(
       `
@@ -53,6 +56,7 @@ class SessionController {
     return { ...user, Areas, Modulos, Diretorios, Funcionalidades }
 
     } catch (error) {
+
       return response.status(404).json({ message: "app.login.message-invalid-credentials" })
     }
 
@@ -66,6 +70,7 @@ class SessionController {
   }
 
   async store ({ request, response, auth }) {
+    try {
     const { Login, password } = request.all()
     const passwordCrypto = await crypto.MD5(password).toString().toLocaleUpperCase()
     const loginUperCase = Login.toLocaleUpperCase()
@@ -87,7 +92,10 @@ class SessionController {
     const token = await auth.generate(user)
 
     return token
+    } catch (error) {
 
+      return response.status(404).json({ message: "app.login.message-invalid-credentials" })
+    }
   }
 
 }
