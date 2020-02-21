@@ -24,7 +24,6 @@ class MaintenanceItemController {
 
   async showMaintenanceItemByClasseFalhaIDByEquipamentoModeloID ({ request, response }) {
     const { ClasseFalhaID, EquipamentoModeloID } = request.all()
-  console.log(ClasseFalhaID,EquipamentoModeloID);
 
    if (!ClasseFalhaID) {
      return response
@@ -46,6 +45,8 @@ class MaintenanceItemController {
    .where({ 'man.ManutencaoItens.Ativo': true })
    .where({'man.ManutencaoItensEquipamentosModelos.EquipamentoModeloID': EquipamentoModeloID})
    .where({'man.ManutencaoItens.ClasseFalhaID': ClasseFalhaID})
+   .groupByRaw('man.ManutencaoItens.ManutencaoItenID, man.ManutencaoItens.Descricao')
+   .orderBy('man.ManutencaoItens.Descricao')
 
    return manutencaoItens
   }
