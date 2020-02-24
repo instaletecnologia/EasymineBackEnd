@@ -37,9 +37,10 @@
     lodash "^4.17.11"
     require-all "^3.0.0"
 
-"@adonisjs/auth@^3.0.7":
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/@adonisjs/auth/-/auth-3.0.7.tgz#e18ed04b003acbb24ad0f4a86ab82cecc6fca5b1"
+"@adonisjs/auth@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@adonisjs/auth/-/auth-3.1.0.tgz#039c2bd60d959d3bb5e6e49ec29825ad54b165d8"
+  integrity sha512-NLy0Jjmb7/Vmh5GvL7ma8qrSoC8oW32lcz6T5FRDMnXFs59pfBS0Mej0Try6iY/aGGFMKiLVVOoGzhgWgeX8eA==
   dependencies:
     "@adonisjs/generic-exceptions" "^2.0.1"
     basic-auth "^2.0.1"
@@ -1106,10 +1107,10 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
-date-fns@^2.0.0-beta.5:
-  version "2.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.0.0-beta.5.tgz#90885db3772802d55519cd12acd49de56aca1059"
-  integrity sha512-GS5yi964NDFNoja9yOdWFj9T97T67yLrUeJZgddHaVfc/6tHWtX7RXocuubmZkNzrZUZ9BqBOW7jTR5OoWjJ1w==
+date-fns@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.9.0.tgz#d0b175a5c37ed5f17b97e2272bbc1fa5aec677d2"
+  integrity sha512-khbFLu/MlzLjEzy9Gh8oY1hNt/Dvxw3J6Rbc28cVoYWQaC1S3YI4xwkF9ZWcjDLscbZlY9hISMr66RFzZagLsA==
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.3, debug@^2.6.6, debug@^2.6.8:
   version "2.6.9"

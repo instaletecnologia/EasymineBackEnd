@@ -1,7 +1,10 @@
 'use strict'
 
 const User = use("App/Models/Usuarios")
+
 const Defaults = use('App/Defaults/Dates')
+
+const RulesBusinessUser = use('App/RulesBusiness/RulesBusinessUser')
 
 class UserController {
 
@@ -13,24 +16,18 @@ class UserController {
     return user
   }
 
-  async indexSelectMechanical ({ request, response, view }) {
-    const users = await User.query()
-    .select('UsuarioID','Nome')
-    .where('Ativo', true)
-    .where('UsuarioPermissaoID', 15)
-    .orderBy('Nome')
-    .fetch()
-
+  async indexMaintenancePermissionMecanical ({ request, response }) {
+    const users = await RulesBusinessUser.UsersWithMaintenancePermissionMecanical()
     return users
   }
 
-  async indexActive ({ request, response, view }) {
-    const users = await User.query()
-    .select('UsuarioID','Nome', 'Chapa', 'UsuarioPermissaoID')
-    .where('Ativo', true)
-    .orderBy('Nome')
-    .fetch()
+   async indexMaintenancePermission ({ request, response }) {
+    const users = await RulesBusinessUser.UsersWithMaintenancePermission()
+    return users
+  }
 
+  async indexActive ({ request, response }) {
+    const users = await RulesBusinessUser.UsersActive()
     return users
   }
 
