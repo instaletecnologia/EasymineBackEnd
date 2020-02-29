@@ -49,7 +49,8 @@ Route.group (() => {
 
     //Routes Users
     Route.get('/users', 'UserController.index')
-    Route.get('/users-mechanical', 'UserController.indexSelectMechanical')
+    Route.get('/users-mechanical', 'UserController.indexMaintenancePermissionMecanical')
+    Route.get('/users-maintenance-permission', 'UserController.indexMaintenancePermission')
     Route.get('/users-active', 'UserController.indexActive')
     Route.get('/users/:id', 'UserController.show')
     Route.put('/users/:id', 'UserController.update').validator('User/update')
@@ -112,10 +113,9 @@ Route.group (() => {
     Route.get('/maintenance-ocorrence-by-type', 'OccurrenceController.indexOcorrenceByMaintenanceType')
     //Maintenance Occorrence
 
-    //Maintenance Equipment ControlHour
-    Route.post('/maintenance-equipment-control-hour', 'EquipmentControlHourController.storeMaintenance')
-    Route.post('/maintenance-equipment-release-control-hour', 'EquipmentControlHourController.storeMaintenanceRelease')
-    //Maintenance Equipment ControlHour
+    //Maintenance Equipment release
+    Route.post('/maintenance-release', 'MaintenanceReleaseController.store')
+    //Maintenance Equipment release
 
      //Maintenance Item
      Route.get('/maintenance-items', 'MaintenanceItemController.showMaintenanceItemByClasseFalhaIDByEquipamentoModeloID')
