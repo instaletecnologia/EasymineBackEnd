@@ -1,5 +1,7 @@
 const Model = use("Model");
 const moment = require("moment");
+const _ = require("lodash");
+
 const Formats = use('Antl/Formats')
 
 const EquipmentControlHour = use('App/Models/EquipmentControlHour')
@@ -12,7 +14,14 @@ static async EquipmentControlHourInsert( controlTimeID,equipmentID,ocorrenceID,o
   dateEnd,latitude,longitude,altitude,dmt,currentKm,weight,InsideTheFence,SensorID,value,valueType,
   ok,full,ocorrenceTypeID,note,logged,frontID,horimeter,userID) {
 
-     // criamos o novo registro na tabela controlehoras
+  // vamos atualizar a ultima linha da controlehoras
+  const controlHourLast = await RulesBusinessEquipmentControlHour.EquipmentoControlHourGetLast(equipmentID)
+  if (!_.isEmpty(controlHourLast)) {
+    const controlHourLastID = _.get(_.first(controlHourLast), 'ControleHoraID')
+    await RulesBusinessEquipmentControlHour.EquipmentControlHourUpdate(controlHourLastID, equipmentID, dateStart, userID)
+  }
+
+   // criamos o novo registro na tabela controlehoras
     const userId = await Database
     .insert({
       ControleHoraID: controlTimeID
@@ -49,24 +58,35 @@ static async EquipmentControlHourInsert( controlTimeID,equipmentID,ocorrenceID,o
 
 }
 
-static async EquipmentControlHourUpdate(controlTimeID, equipmentID, dateEnd, UserID) {
-      const oquipmentOperation = await Database
-      .table('dbo.ControleHoras')
-      .where({'ControleHoraID': controlTimeID})
-      .where({'EquipamentoID': equipmentID})
-      .update({ DataHoraTermino: dateEnd, DataAlteracao: dateEnd, LastEditDate: dateEnd, UsuarioAtualizaID: UserID })
+  static async EquipmentControlHourUpdate(controlTimeID, equipmentID, dateEnd, userID) {
+    const resultUpdate = await Database
+     .table('dbo.ControleHoras')
+      .where({'dbo.ControleHoras.ControleHoraID': controlTimeID.toString()})
+      .update({ DataHoraTermino: dateEnd, DataAlteracao: dateEnd, UsuarioAtualizaID: userID })
 
-    return oquipmentOperation
-}
+     return equipmentID
+  }
 
 // função responsavel por retornar a ultima operacao do equipamento
-  static async EquipmentoControlHourGetLast(equipmentID){
+  static async EquipmentoControlHourGetLast(equipmentID)
+  {
        const operation = await Database
         .select('dbo.ControleHoras.ControleHoraID','dbo.ControleHoras.OperacaoID', 'dbo.ControleHoras.OcorrenciaID')
         .from('dbo.ControleHoras')
         .where({'dbo.ControleHoras.EquipamentoID': equipmentID})
         .limit(1)
         .orderBy('dbo.ControleHoras.DataHoraInicio', 'desc')
+
+        return operation
+  }
+
+// função responsavel por retornar o registro de acordo com o controlehoraID
+  static async EquipmentoControlHourGetID(controlTimeID)
+  {
+       const operation = await Database
+        .select('dbo.ControleHoras.ControleHoraID','dbo.ControleHoras.OperacaoID', 'dbo.ControleHoras.OcorrenciaID', 'dbo.ControleHoras.DataHoraInicio')
+        .from('dbo.ControleHoras')
+        .where({'dbo.ControleHoras.ControleHoraID': controlTimeID.toString()})
 
         return operation
   }

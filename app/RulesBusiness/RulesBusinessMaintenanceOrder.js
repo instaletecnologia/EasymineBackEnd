@@ -9,13 +9,14 @@ const Database = use('Database')
 class RulesBusinessMaintenanceOrder {
 
 
-  static async MaintenanceOrdersByEquipmentIDByCategoryTimeID() {
+  static async MaintenanceOrdersByEquipmentIDByCategoryTimeID(equipmentID, categoryID) {
 
     const orders = await Database
         .select('man.OrdensManutencoes.OrdemManutencaoID', 'man.OrdensManutencoes.NumeroOrdem')
         .from('man.OrdensManutencoes')
-        .where({'man.OrdensManutencoes.EquipamentoID': true})
-        .where({'man.OrdensManutencoes.CategoriaID': true})
+        .where({'man.OrdensManutencoes.EquipamentoID': equipmentID})
+        .where({'man.OrdensManutencoes.CategoriaID': categoryID})
+        .whereNot({'man.OrdensManutencoes.Status': 'F'})
         .orderBy('NumeroOrdem','desc')
 
    return orders

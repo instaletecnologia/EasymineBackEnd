@@ -24,19 +24,19 @@ class MaintenanceOrderController {
   async showMaintenanceOrdersByEquipmentIDByCategoryTimeID ({ request, response }) {
     const { EquipamentoID, idCategoriasTempo } = request.all()
 
-   if (!EquipamentoID) {
-     return response
-     .status(404)
-     .json({ message: "maintenance.error.release.WithoutOccurrence" })
-   }
+    if (!EquipamentoID) {
+      return response
+      .status(404)
+      .json({ message: "maintenance.error.release.WithoutOccurrence" })
+    }
 
-   if (!idCategoriasTempo) {
-     return response
-     .status(404)
-     .json({ message: "maintenance.error.release.WithoutOccurrence" })
-  }
+     if (!idCategoriasTempo) {
+      return response
+      .status(404)
+      .json({ message: "maintenance.error.release.WithoutOccurrence" })
+    }
 
-  return await RulesBusinessMaintenanceOrder.MaintenanceOrdersByEquipmentIDByCategoryTimeID(EquipamentoID,idCategoriasTempo)
+    return await RulesBusinessMaintenanceOrder.MaintenanceOrdersByEquipmentIDByCategoryTimeID(EquipamentoID,idCategoriasTempo)
 
   }
 

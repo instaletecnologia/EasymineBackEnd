@@ -16,7 +16,9 @@ class MaintenanceReasonController {
     const maintenanceReason = await Database
    .select('man.MotivosManutencao.MotivoManutencaoID','man.MotivosManutencao.Descricao')
    .from('man.MotivosManutencao')
-   //.where({ 'man.MotivosManutencao.Ativo': true })
+   .where({ 'man.MotivosManutencao.Ativo': true })
+   .orderBy('man.MotivosManutencao.Descricao')
+
     return maintenanceReason
   }
 

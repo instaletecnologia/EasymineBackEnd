@@ -1,14 +1,25 @@
 const Model = use("Model");
 
 const Database = use('Database')
+const _ = require("lodash");
+
+const Defaults = use('App/Defaults/Dates')
 
 const RulesBusinessMaintenanceSchedulesHistory = use('App/RulesBusiness/RulesBusinessMaintenanceSchedulesHistory')
-
 
 class RulesBusinessMaintenanceSchedules {
 
   // retorna todos os usuario ativos no sistema:
-  static async MaintenanceSchedulesInsert(idCategoriasTempo, parentID, equipmentID, dateStart, order value, userID, note, dateCreation) {
+  static async MaintenanceSchedulesInsert(
+    idCategoriasTempo,
+    parentID,
+    equipmentID,
+    dateStart,
+    order,
+    value,
+    userID,
+    note,
+    dateCreation) {
 
       let serviceMaintenanceID = 0
 			//SE FOR PARENT(6) OU CATEGORIA DE TEMPO(6) DE MANUTENCAO PREVENTIVA  -- HMP HORAS MANUTENÇÃO PREVENTIVA
@@ -19,29 +30,38 @@ class RulesBusinessMaintenanceSchedules {
       if (idCategoriasTempo === 7 || parentID === 7) {
         serviceMaintenanceID = 1
       }
-        let dateEnd = DATEADD(hour,48,dateStart)
+
+        let dateEnd = await Defaults.DateAddHorus(48)
+
 				let status = 'I'
 				let descriptopnService =value
-				// VERIFICA O VALORTIPO SENDO INDICADO PELO EMBARCADO DESSA FORMA ALTERA O VALOR PARA APRESENTAR
-				// NA GRADE DE PROGRAMAÇÕES DA CENTRAL DE SOLICITAÇÕES - RAFAEL XAVIER - 16/09/2019
-				if (descriptopnService === null || descriptopnService = '') {
-          descriptopnService = '#EMBARCADO'
+			//	// VERIFICA O VALORTIPO SENDO INDICADO PELO EMBARCADO DESSA FORMA ALTERA O VALOR PARA APRESENTAR
+			//	// NA GRADE DE PROGRAMAÇÕES DA CENTRAL DE SOLICITAÇÕES - RAFAEL XAVIER - 16/09/2019
+				if (descriptopnService === null || descriptopnService === '') {
+           descriptopnService = '#EMBARCADO'
+         }
+
+        if (order === null) {
+          order = ''
         }
 
-         const maintenanceSchedulesID = await Database
+         const maintenanceSchedules = await Database
             .insert({
               	ServicoManutencaoID: serviceMaintenanceID,
 							  EquipamentoID: equipmentID,
 							  DescricaoServicos: descriptopnService,
 							  DataInicio: dateStart,
 							  DataFim: dateEnd,
-							  NumeroOrdem: order
-							  DataRegistro: dateCreation
-							  UsuarioRegistroID: userID
-							  Observacoes: note
+							  NumeroOrdem: order,
+							  DataRegistro: dateCreation,
+							  UsuarioRegistroID: userID,
+							  Observacoes: note,
 							  Status: status
               })
-            .into('man.ManutencaoProgramacoes')
+              .into('man.ManutencaoProgramacoes')
+              .returning('ManutencaoProgramacaoID')
+
+            const maintenanceSchedulesID = _.first(maintenanceSchedules, 1)
 
             const maintenanceSchedulesHistoryID = await RulesBusinessMaintenanceSchedulesHistory
             .MaintenanceSchedulesHistoryInsert(

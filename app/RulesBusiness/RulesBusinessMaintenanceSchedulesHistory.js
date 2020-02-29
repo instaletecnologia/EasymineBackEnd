@@ -16,10 +16,10 @@ class RulesBusinessMaintenanceSchedulesHistory {
       .insert({
     		ManutencaoProgramacaoID: maintenanceSchedulesID,
 				ManutencaoProgramacaoStatusID: maintenanceSchedulesStatusID,
-				Data: dateStart
-				Observacoes: note
-				DataRegistro: dateCreation
-				UsuarioRegistroID: userID
+				Data: dateStart,
+				Observacoes: note,
+				DataRegistro: dateCreation,
+				UsuarioRegistroID: userID,
 				Ativo: true
       })
     .into('man.ManutencaoProgramacoesHistoricos')
