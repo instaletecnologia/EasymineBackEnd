@@ -85,9 +85,10 @@ class MaintenanceReleaseController {
     // criamos o novo registro na tabela controlehoras
     //criamos o controlehoraID
     let id = IdGenerator.controlHour(EquipamentoID)
+
     const controlTimeID = await RulesBusinessEquipmentControlHour.EquipmentControlHourInsert(
-     id,EquipamentoID,ocorrenceID, operationId, NewcurrentDate, null, 0, 0, 0, 0, 0, 0, 0, 0,'M',
-     '#MANUTENCAO', 0, 0, ocorrenceTypeID, note, 0, frontID, horimetro, usuarioID)
+      id,EquipamentoID,ocorrenceID, operationId, NewcurrentDate, null, 0, 0, 0, 0, 0, 0, 0, 0,'M',
+      '#MANUTENCAO', 0, 0, ocorrenceTypeID, note, 0, frontID, horimetro, usuarioID)
 
     // vamos inserir uma mensagem do tipo ocorrencia para que o embarcado receba a alteração de ocorrencia
     await RulesBusinessMessage.MessageInsert(EquipamentoID, "Equipamento liberado", NewcurrentDate, usuarioID, 5,
@@ -95,9 +96,9 @@ class MaintenanceReleaseController {
 
     // vamos registrar a liberação do equipamento
     await RulesBusinessMaintenanceRelease.MaintenanceReleaseInsert(
-     EquipamentoID, UsuarioMecanicoID, horimetro, operationId, id, ocorrenceID, usuarioID, NewcurrentDate
+     ControleHoraID,EquipamentoID, UsuarioMecanicoID, horimetro, operationId, id, ocorrenceID, usuarioID, NewcurrentDate
     )
-
+    return 'ok'
      return controlTimeID
   }
 

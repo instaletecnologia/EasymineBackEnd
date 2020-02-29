@@ -7,7 +7,10 @@ class RulesBusinessOccurrence {
   // retorna a ocorrencia de acordo com a ocorrenciaID
   static async OccurrenceByID(ocorrenceID) {
     const ocorrence = await Database
-      .select('dbo.Ocorrencias.OcorrenciaID','dbo.Ocorrencias.OcorrenciaTipoID', 'dbo.Ocorrencias.PermanecerNaAtividade')
+      .select('dbo.Ocorrencias.OcorrenciaID',
+      'dbo.Ocorrencias.OcorrenciaTipoID',
+      'dbo.Ocorrencias.PermanecerNaAtividade',
+      'dbo.Ocorrencias.idCategoriasTempo' )
       .from('dbo.Ocorrencias')
       .where({'dbo.Ocorrencias.OcorrenciaID': ocorrenceID})
     return  ocorrence
@@ -31,6 +34,7 @@ class RulesBusinessOccurrence {
     .innerJoin('dbo.Equipamentos', 'dbo.Equipamentos.EquipamentoTipoID', 'dbo.Ocorrencias.EquipamentoTipoID')
     .innerJoin('dbo.CategoriasTempo', 'dbo.CategoriasTempo.idCategoriasTempo', 'dbo.Ocorrencias.idCategoriasTempo')
     .where({ 'dbo.Ocorrencias.Ativo': true })
+    .where({ 'dbo.Ocorrencias.Acao': 'M' })
     .where({'dbo.Equipamentos.EquipamentoID': equipmentId})
     .where({'dbo.CategoriasTempo.idCategoriasTempo': maintenanceType})
     .orWhere({'dbo.CategoriasTempo.ParentID': maintenanceType})

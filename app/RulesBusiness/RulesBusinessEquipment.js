@@ -79,7 +79,7 @@ class RulesBusinessEquipment {
    return equipments
   }
 
-  // função retorna todos os equipamentos que nao estão em manutenção que estão ativos e possuem alocação
+  // função retorna todos os equipamentos que nao estão em manutenção que estão ativos e devem estar alocados
   static async EquipmentGetAcitiveNoInMaintenance() {
     const subquery = Database
       .select('EquipamentoID')
@@ -93,7 +93,7 @@ class RulesBusinessEquipment {
         'dbo.Equipamentos.TagNumero',
         'dbo.Equipamentos.Ativo')
         .from('dbo.Operacoes')
-        .innerJoin('dbo.Equipamentos', 'dbo.Equipamentos.EquipamentoID', 'dbo.Equipamentos.EquipamentoID')
+        .innerJoin('dbo.Equipamentos', 'dbo.Equipamentos.EquipamentoID', 'dbo.Operacoes.EquipamentoID')
         .where({'dbo.Operacoes.DataFim': null})
         .where({'dbo.Equipamentos.Ativo': true})
         .whereNotIn('dbo.Equipamentos.EquipamentoID', subquery)

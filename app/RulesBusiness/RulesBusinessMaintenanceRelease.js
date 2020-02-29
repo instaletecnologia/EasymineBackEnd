@@ -12,6 +12,7 @@ class RulesBusinessMaintenanceRelease {
 
 // função para inserir uma nova liberação de equipamento para operacao
 static async MaintenanceReleaseInsert(
+  controlHourPreviousID,
   equipmentID,
   mechanicallID,
   horimeter,
@@ -22,8 +23,7 @@ static async MaintenanceReleaseInsert(
   date
   ) {
 
-  const equipmentControlTimePrevious = await RulesBusinessEquipmentControlHour.EquipmentoControlHourGetLast(equipmentID)
-  const controlHourPreviousID = _.get(_.first(equipmentControlTimePrevious), 'ControleHoraID')
+  const equipmentControlTimePrevious = await RulesBusinessEquipmentControlHour.EquipmentoControlHourGetID(controlHourPreviousID)
   const operationPreviousID = _.get(_.first(equipmentControlTimePrevious), 'OperacaoID')
   const ocorrencePreviousID = _.get(_.first(equipmentControlTimePrevious), 'OcorrenciaID')
 

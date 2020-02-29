@@ -20,9 +20,16 @@ static formatDates( value) {
 }
 
 static async currentDate() {
-
   // função pega a data do servidor para realizar operacoes com datas.
   const dateServer = await Database.raw(` SELECT GETDATE() as Date`)
+  const date = _.get(_.first(dateServer), 'Date')
+  const result =  moment.utc(date, "pt")
+  return moment(result).format('YYYYMMDD HH:mm:ss.SSS')
+}
+
+static async DateAddHorus(hours) {
+   // função pega a data do servidor para realizar operacoes com datas.
+  const dateServer = await Database.raw(` SELECT DATEADD(HOUR,${hours},GETDATE()) as Date`)
   const date = _.get(_.first(dateServer), 'Date')
   const result =  moment.utc(date, "pt")
   return moment(result).format('YYYYMMDD HH:mm:ss.SSS')
