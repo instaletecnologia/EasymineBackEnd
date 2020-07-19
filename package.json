@@ -33,7 +33,7 @@
     "crypto-js": "^3.1.9-1",
     "date-fns": "^2.9.0",
     "knex": "^0.20.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "mssql": "4.1.0",
     "socket.io-client": "^2.3.0",
